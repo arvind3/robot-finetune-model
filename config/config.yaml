@@ -1,0 +1,13 @@
+base_model: Qwen/Qwen2.5-3B-Instruct
+fallback_model: Qwen/Qwen2.5-1.5B-Instruct
+hf_model_repo: arvind3/robotframework-expert-qwen2.5-3b-lora
+hf_dataset_repo: arvind3/robotframework-expert-dataset
+seed: 42
+eval_size: 50
+synthetic_count: 200
+max_doc_chunks: 1000
+max_seq_length: 2048
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+github_repo_url: https://github.com/arvind3/robot-finetune-model.git

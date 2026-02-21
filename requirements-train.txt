@@ -1,0 +1,12 @@
+python-dotenv
+pyyaml
+tqdm
+huggingface_hub
+datasets
+transformers
+trl
+peft
+accelerate
+bitsandbytes
+unsloth
+sentencepiece

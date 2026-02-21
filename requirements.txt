@@ -1,0 +1,7 @@
+python-dotenv
+pyyaml
+tqdm
+beautifulsoup4
+huggingface_hub
+robotframework
+robotframework-robocop

@@ -1,0 +1,127 @@
+[
+  {
+    "id": "bp-001",
+    "topic": "best_practices",
+    "user": "List three core best practices for organizing Robot Framework suites.",
+    "assistant": "Use a clear Settings/Test Cases/Keywords structure, keep tests small and focused, and move reusable keywords into resource files. Use meaningful test names and consistent tags.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-002",
+    "topic": "resource_files",
+    "user": "Show a minimal example using a resource file for shared keywords.",
+    "assistant": "Here is a minimal example using a resource file.\n\nMain suite:\n```robot\n*** Settings ***\nResource    resources/common.robot\n\n*** Test Cases ***\nHealth Check\n    Open App\n    Close App\n```\n\nResource file:\n```robot\n*** Keywords ***\nOpen App\n    Log    Opening app\n\nClose App\n    Log    Closing app\n```",
+    "robot_snippet": "*** Test Cases ***\nHealth Check\n    Open App\n    Close App\n\n*** Keywords ***\nOpen App\n    Log    Opening app\n\nClose App\n    Log    Closing app",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-003",
+    "topic": "waits",
+    "user": "Why should I avoid using Sleep? Give a better alternative with an example.",
+    "assistant": "Prefer explicit waits that retry until a condition is met. Example:\n```robot\n*** Test Cases ***\nWait For Page\n    Wait Until Keyword Succeeds    30s    1s    Should Contain    Welcome    Welcome\n```",
+    "robot_snippet": "*** Test Cases ***\nWait For Page\n    Wait Until Keyword Succeeds    30s    1s    Should Contain    Welcome    Welcome",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-004",
+    "topic": "refactor",
+    "user": "Refactor this suite to be cleaner and more readable:\n```robot\n*** Test Cases ***\nT1\n    Log    step1\n    Log    step2\n    Log    step3\n```",
+    "assistant": "Here is a cleaner version with a reusable keyword and a descriptive name:\n```robot\n*** Test Cases ***\nBasic Flow\n    Run Basic Flow\n\n*** Keywords ***\nRun Basic Flow\n    Log    step1\n    Log    step2\n    Log    step3\n```",
+    "robot_snippet": "*** Test Cases ***\nBasic Flow\n    Run Basic Flow\n\n*** Keywords ***\nRun Basic Flow\n    Log    step1\n    Log    step2\n    Log    step3",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-005",
+    "topic": "failure_diagnosis",
+    "user": "This run failed:\n`No keyword with name 'Open Browser' found.` What is the likely cause and fix?",
+    "assistant": "The SeleniumLibrary is likely not imported, or it is imported under a different name. Add `Library    SeleniumLibrary` in the Settings section or fix the library name.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-006",
+    "topic": "python_library",
+    "user": "Show how to use a standard library keyword from OperatingSystem.",
+    "assistant": "Example using the OperatingSystem library:\n```robot\n*** Settings ***\nLibrary    OperatingSystem\n\n*** Test Cases ***\nList Current Dir\n    List Files In Directory    .\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    OperatingSystem\n\n*** Test Cases ***\nList Current Dir\n    List Files In Directory    .",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-007",
+    "topic": "variables",
+    "user": "Give a short example of using a Variables table.",
+    "assistant": "Example with a Variables table:\n```robot\n*** Variables ***\n${ENV}    local\n\n*** Test Cases ***\nShow Env\n    Log    ${ENV}\n```",
+    "robot_snippet": "*** Variables ***\n${ENV}    local\n\n*** Test Cases ***\nShow Env\n    Log    ${ENV}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-008",
+    "topic": "tags",
+    "user": "How do I add tags and filter tests?",
+    "assistant": "Add tags in the [Tags] setting, then run with --include or --exclude. Example:\n```robot\n*** Test Cases ***\nLogin Works\n    [Tags]    smoke    auth\n    Log    ok\n```",
+    "robot_snippet": "*** Test Cases ***\nLogin Works\n    [Tags]    smoke    auth\n    Log    ok",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-009",
+    "topic": "setup_teardown",
+    "user": "Provide an example using Suite Setup and Suite Teardown.",
+    "assistant": "Example:\n```robot\n*** Settings ***\nSuite Setup    Open App\nSuite Teardown    Close App\n\n*** Test Cases ***\nSmoke\n    Log    running\n\n*** Keywords ***\nOpen App\n    Log    open\n\nClose App\n    Log    close\n```",
+    "robot_snippet": "*** Settings ***\nSuite Setup    Open App\nSuite Teardown    Close App\n\n*** Test Cases ***\nSmoke\n    Log    running\n\n*** Keywords ***\nOpen App\n    Log    open\n\nClose App\n    Log    close",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-010",
+    "topic": "templates",
+    "user": "Show a short example of Test Template usage.",
+    "assistant": "Example:\n```robot\n*** Settings ***\nTest Template    Add Numbers\n\n*** Test Cases ***\nCase 1    1    2\nCase 2    5    7\n\n*** Keywords ***\nAdd Numbers\n    [Arguments]    ${a}    ${b}\n    Log    ${a} + ${b}\n```",
+    "robot_snippet": "*** Settings ***\nTest Template    Add Numbers\n\n*** Test Cases ***\nCase 1    1    2\nCase 2    5    7\n\n*** Keywords ***\nAdd Numbers\n    [Arguments]    ${a}    ${b}\n    Log    ${a} + ${b}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-011",
+    "topic": "keyword_args",
+    "user": "Show how to define a keyword with arguments and return a value.",
+    "assistant": "Example:\n```robot\n*** Test Cases ***\nBuild Url Example\n    ${u}=    Build Url    example.com    path\n    Log    ${u}\n\n*** Keywords ***\nBuild Url\n    [Arguments]    ${host}    ${path}\n    ${url}=    Set Variable    https://${host}/${path}\n    RETURN    ${url}\n```",
+    "robot_snippet": "*** Test Cases ***\nBuild Url Example\n    ${u}=    Build Url    example.com    path\n    Log    ${u}\n\n*** Keywords ***\nBuild Url\n    [Arguments]    ${host}    ${path}\n    ${url}=    Set Variable    https://${host}/${path}\n    RETURN    ${url}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-012",
+    "topic": "data_driven",
+    "user": "Give a data-driven example without Test Template.",
+    "assistant": "Use a FOR loop over data rows:\n```robot\n*** Test Cases ***\nLogin Variants\n    FOR    ${user}    ${pw}    IN\n    ...    alice    a1\n    ...    bob      b2\n        Log    ${user} ${pw}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nLogin Variants\n    FOR    ${user}    ${pw}    IN\n    ...    alice    a1\n    ...    bob      b2\n        Log    ${user} ${pw}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-013",
+    "topic": "retries",
+    "user": "Show a pattern for retrying a flaky keyword.",
+    "assistant": "Example with retry:\n```robot\n*** Test Cases ***\nRetry Example\n    Wait Until Keyword Succeeds    1 min    5 sec    Keyword That Sometimes Fails\n\n*** Keywords ***\nKeyword That Sometimes Fails\n    Log    placeholder\n```",
+    "robot_snippet": "*** Test Cases ***\nRetry Example\n    Wait Until Keyword Succeeds    1 min    5 sec    Keyword That Sometimes Fails\n\n*** Keywords ***\nKeyword That Sometimes Fails\n    Log    placeholder",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-014",
+    "topic": "teardown",
+    "user": "How do I log additional details on failure?",
+    "assistant": "Use a teardown to log extra context. Example:\n```robot\n*** Test Cases ***\nCheckout\n    Log    running\n    [Teardown]    Log    Teardown details\n```",
+    "robot_snippet": "*** Test Cases ***\nCheckout\n    Log    running\n    [Teardown]    Log    Teardown details",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-015",
+    "topic": "unknown",
+    "user": "Does Robot Framework support native mobile testing without Appium?",
+    "assistant": "I am not sure. Robot Framework typically relies on external libraries such as AppiumLibrary for mobile testing. If you need mobile automation, check the official docs for supported libraries.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-016",
+    "topic": "naming",
+    "user": "Show a minimal suite with descriptive names and documentation.",
+    "assistant": "Example:\n```robot\n*** Settings ***\nDocumentation    Verifies critical login behavior.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Ensures valid users can sign in.\n    Log    login ok\n```",
+    "robot_snippet": "*** Settings ***\nDocumentation    Verifies critical login behavior.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Ensures valid users can sign in.\n    Log    login ok",
+    "doc_ref": "synthetic"
+  }
+]
