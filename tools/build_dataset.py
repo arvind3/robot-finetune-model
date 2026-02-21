@@ -3,6 +3,7 @@ import json
 import random
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -175,8 +176,48 @@ def main():
         "synthetic_examples": len(synth_examples),
     }
     (out_dir / "build_meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    write_dataset_card(out_dir, cfg)
 
     print(f"Wrote {len(train_set)} train and {len(eval_set)} eval records to {out_dir}")
+
+
+def write_dataset_card(out_dir: Path, cfg: dict) -> None:
+    repo_id = cfg.get("hf_dataset_repo", "robotframework-expert-dataset")
+    dataset_name = repo_id.split("/")[-1]
+    now = datetime.utcnow().strftime("%Y-%m-%d")
+    card = f"""---
+dataset_name: {dataset_name}
+language:
+- en
+license: other
+task_categories:
+- text-generation
+tags:
+- robotframework
+- automation
+- synthetic
+- documentation
+created: {now}
+---
+
+# Dataset
+
+This dataset is built from:
+
+- Local Robot Framework documentation files in `sources/robotframework_docs/` (if present)
+- Curated synthetic examples in `data/synthetic_examples.json`
+
+## License and attribution
+
+- Robot Framework docs remain under their original licenses. Do not redistribute doc-derived datasets unless the license allows it.
+- Synthetic examples are authored for this project.
+
+## Files
+
+- `train.jsonl` and `eval.jsonl`: SFT records using `messages` format
+- `build_meta.json`: counts and build configuration
+"""
+    (out_dir / "README.md").write_text(card, encoding="utf-8")
 
 
 if __name__ == "__main__":

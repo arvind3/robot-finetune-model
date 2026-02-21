@@ -1,3 +1,18 @@
+---
+dataset_name: robotframework-expert-dataset
+language:
+- en
+license: other
+task_categories:
+- text-generation
+tags:
+- robotframework
+- automation
+- synthetic
+- documentation
+created: 2026-02-21
+---
+
 # Dataset
 
 This dataset is built from:

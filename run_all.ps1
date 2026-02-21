@@ -6,7 +6,7 @@ if (Test-Path .env) {
       $name = $Matches[1]
       $value = $Matches[2]
       if (-not [string]::IsNullOrWhiteSpace($value)) {
-        $env:$name = $value
+        Set-Item -Path "Env:$name" -Value $value
       }
     }
   }

@@ -22,6 +22,13 @@ On Windows:
 
 The script will build/validate the dataset, optionally publish it to HF, and generate the Colab notebook. It will print a single Colab URL. Open it and click **Run all**.
 
+## Colab token setup
+
+The Colab notebook will prompt for `HF_TOKEN` if it is missing. You can set it in one of two ways:
+
+1. Colab Secrets (recommended): click the key icon in Colab, add a secret named `HF_TOKEN`, then restart the runtime.
+2. Manual prompt: when the first token cell runs, paste your HF token into the prompt.
+
 ## What gets produced
 
 - `dataset/train.jsonl` and `dataset/eval.jsonl`
