@@ -66,7 +66,13 @@ def summarize_extractive(text: str, max_sentences: int = 5) -> str:
 def build_doc_examples(sources_dir: Path, max_chunks: int):
     if not sources_dir.exists():
         return []
-    files = [p for p in sources_dir.rglob("*") if p.is_file() and p.suffix.lower() in {".md", ".html", ".htm", ".txt"}]
+    files = [
+        p
+        for p in sources_dir.rglob("*")
+        if p.is_file()
+        and p.suffix.lower() in {".md", ".html", ".htm", ".txt"}
+        and "placeholder" not in p.name.lower()
+    ]
     examples = []
     for path in files:
         text = clean_text(read_text(path))
@@ -141,8 +147,11 @@ def main():
 
     doc_examples = build_doc_examples(Path(args.sources_dir), max_doc_chunks)
     synth_examples = build_synthetic_examples(Path("data/synthetic_examples.json"), args.skip_validation)
-    if synthetic_count and synthetic_count < len(synth_examples):
-        synth_examples = random.sample(synth_examples, synthetic_count)
+    if synthetic_count:
+        if synthetic_count <= len(synth_examples):
+            synth_examples = random.sample(synth_examples, synthetic_count)
+        else:
+            synth_examples = [random.choice(synth_examples) for _ in range(synthetic_count)]
 
     all_examples = doc_examples + synth_examples
     random.shuffle(all_examples)
