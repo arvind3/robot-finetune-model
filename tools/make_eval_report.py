@@ -34,9 +34,12 @@ def _has_model_weights(model_dir: Path) -> bool:
 def load_model(base_model: str, adapter_dir: str | None, merged_dir: str | None):
     merged_path = Path(merged_dir) if merged_dir else None
     if merged_path and _has_model_weights(merged_path):
-        tokenizer = _load_tokenizer(merged_path.as_posix())
-        model = AutoModelForCausalLM.from_pretrained(merged_path.as_posix(), device_map="auto")
-        return tokenizer, model
+        try:
+            tokenizer = _load_tokenizer(merged_path.as_posix())
+            model = AutoModelForCausalLM.from_pretrained(merged_path.as_posix(), device_map="auto")
+            return tokenizer, model
+        except Exception as exc:
+            print(f\"Merged model load failed, falling back to base+adapter: {exc}\")
     tokenizer = _load_tokenizer(base_model)
     model = AutoModelForCausalLM.from_pretrained(base_model, device_map="auto")
     if adapter_dir and Path(adapter_dir).exists():
