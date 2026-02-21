@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import sys
+import inspect
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,10 +12,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import torch
+from unsloth import FastLanguageModel
 from datasets import load_dataset
 from transformers import TrainingArguments, set_seed
 from trl import SFTTrainer
-from unsloth import FastLanguageModel
 
 from tools.model_card import render_model_card
 from tools.utils import load_env, read_config, require_env, safe_mkdir
@@ -106,7 +107,7 @@ def main():
     output_dir = Path(args.output_dir)
     safe_mkdir(output_dir)
 
-    training_args = TrainingArguments(
+    training_kwargs = dict(
         output_dir=str(output_dir / "checkpoints"),
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
@@ -116,10 +117,15 @@ def main():
         logging_steps=10,
         save_steps=200,
         eval_steps=200,
-        evaluation_strategy="steps",
         report_to="none",
         seed=seed,
     )
+    args_sig = inspect.signature(TrainingArguments.__init__)
+    if "evaluation_strategy" in args_sig.parameters:
+        training_kwargs["evaluation_strategy"] = "steps"
+    elif "eval_strategy" in args_sig.parameters:
+        training_kwargs["eval_strategy"] = "steps"
+    training_args = TrainingArguments(**training_kwargs)
 
     trainer = SFTTrainer(
         model=model,
