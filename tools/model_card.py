@@ -57,8 +57,8 @@ model = AutoModelForCausalLM.from_pretrained(base_model, device_map="auto")
 model = PeftModel.from_pretrained(model, adapter)
 
 messages = [
-    {"role": "system", "content": "You are an expert Robot Framework + Python automation engineer."},
-    {"role": "user", "content": "Create a minimal Robot Framework test for login."},
+    {{"role": "system", "content": "You are an expert Robot Framework + Python automation engineer."}},
+    {{"role": "user", "content": "Create a minimal Robot Framework test for login."}},
 ]
 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 inputs = tokenizer(text, return_tensors="pt").to(model.device)
