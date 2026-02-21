@@ -15,13 +15,11 @@ from peft import PeftModel
 from tools.utils import iter_jsonl, safe_mkdir
 
 
-def _tokenizer_kwargs():
+def _load_tokenizer(model_id: str):
     try:
-        if "fix_mistral_regex" in AutoTokenizer.from_pretrained.__code__.co_varnames:
-            return {"fix_mistral_regex": True}
-    except Exception:
-        pass
-    return {}
+        return AutoTokenizer.from_pretrained(model_id, fix_mistral_regex=True)
+    except TypeError:
+        return AutoTokenizer.from_pretrained(model_id)
 
 
 def _has_model_weights(model_dir: Path) -> bool:
@@ -34,13 +32,12 @@ def _has_model_weights(model_dir: Path) -> bool:
 
 
 def load_model(base_model: str, adapter_dir: str | None, merged_dir: str | None):
-    tokenizer_kwargs = _tokenizer_kwargs()
     merged_path = Path(merged_dir) if merged_dir else None
     if merged_path and _has_model_weights(merged_path):
-        tokenizer = AutoTokenizer.from_pretrained(merged_path.as_posix(), **tokenizer_kwargs)
+        tokenizer = _load_tokenizer(merged_path.as_posix())
         model = AutoModelForCausalLM.from_pretrained(merged_path.as_posix(), device_map="auto")
         return tokenizer, model
-    tokenizer = AutoTokenizer.from_pretrained(base_model, **tokenizer_kwargs)
+    tokenizer = _load_tokenizer(base_model)
     model = AutoModelForCausalLM.from_pretrained(base_model, device_map="auto")
     if adapter_dir and Path(adapter_dir).exists():
         model = PeftModel.from_pretrained(model, adapter_dir)
