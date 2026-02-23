@@ -71,9 +71,16 @@ def _load_model_4bit(model_id: str):
             model_id, quantization_config=bnb_cfg, device_map="auto"
         )
     except Exception:
-        return AutoModelForCausalLM.from_pretrained(
-            model_id, device_map="auto", torch_dtype=torch.float16
-        )
+        # `dtype` replaces the deprecated `torch_dtype` in transformers >= 4.45;
+        # fall back to the old keyword for older environments.
+        try:
+            return AutoModelForCausalLM.from_pretrained(
+                model_id, device_map="auto", dtype=torch.float16
+            )
+        except TypeError:
+            return AutoModelForCausalLM.from_pretrained(
+                model_id, device_map="auto", torch_dtype=torch.float16
+            )
 
 
 def load_base_model(base_model: str):

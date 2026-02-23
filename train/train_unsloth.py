@@ -254,6 +254,15 @@ def main():
         merged = model.merge_and_unload()
         merged.save_pretrained(merged_dir)
         tokenizer.save_pretrained(merged_dir)
+        # Unsloth carries over the 4-bit quantization_config into the saved config.json.
+        # The merged model is plain fp16 weights; a stale quantization_config causes
+        # device-placement errors when the eval subprocess reloads it.  Strip it so the
+        # eval can load the model cleanly (either in 4-bit via BitsAndBytesConfig or fp16).
+        _merged_cfg_path = merged_dir / "config.json"
+        if _merged_cfg_path.exists():
+            _merged_cfg = json.loads(_merged_cfg_path.read_text(encoding="utf-8"))
+            _merged_cfg.pop("quantization_config", None)
+            _merged_cfg_path.write_text(json.dumps(_merged_cfg, indent=2), encoding="utf-8")
         merged_ok = True
     except Exception:
         merged_ok = False
