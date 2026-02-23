@@ -19,10 +19,15 @@ htmlcov/
 !.env.example
 outputs/
 eval/
+artifacts/
+.colab_playwright_profile/
 dataset/*.jsonl
 dataset/build_meta.json
 sources/robotframework_docs/*
 !sources/robotframework_docs/PLACEHOLDER.md
+!sources/robotframework_docs/official_*.md
+!sources/robotframework_docs/official_*.txt
+!sources/robotframework_docs/official_*.html
 .DS_Store
 Thumbs.db
 .idea/

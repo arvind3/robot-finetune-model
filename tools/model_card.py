@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from tools.utils import base_model_short
-
 
 def render_model_card(
     hf_repo: str,
@@ -9,9 +7,13 @@ def render_model_card(
     dataset_summary: str,
     limitations: str,
     usage: str,
+    tutorial_path: str | None = None,
 ) -> str:
-    short = base_model_short(base_model)
     now = datetime.utcnow().strftime("%Y-%m-%d")
+    tutorial_line = ""
+    if tutorial_path:
+        tutorial_line = f"- Detailed LoRA usage tutorial: `{tutorial_path}`\\n"
+
     return f"""---
 license: apache-2.0
 base_model: {base_model}
@@ -44,6 +46,8 @@ LoRA adapter fine-tuned from `{base_model}` for Robot Framework + Python automat
 {limitations}
 
 ## How to Use
+
+{tutorial_line}
 
 ```python
 from transformers import AutoTokenizer, AutoModelForCausalLM

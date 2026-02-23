@@ -29,6 +29,7 @@ pip install -r requirements.txt
 ```bash
 python tools/build_dataset.py
 python tools/validate_dataset.py
+python tools/validate_eval_suite.py --enforce-balanced-categories
 ```
 
 3. Regenerate the Colab notebook if needed:
