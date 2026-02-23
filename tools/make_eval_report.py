@@ -91,6 +91,20 @@ def load_base_model(base_model: str):
 
 def load_finetuned_model(base_model: str, adapter_dir: str | None, merged_dir: str | None):
     _, PeftModel, _, _ = _runtime_deps()
+
+    # Always prefer the adapter overlay path when available.
+    # Unsloth's merge_and_unload() on a 4-bit-trained model saves the merged
+    # weights as packed uint8 (Blockwise 4-bit), not fp16.  Passing those through
+    # BitsAndBytesConfig fails with "only supports 16/32-bit floats, but got uint8".
+    # Loading the original base model in 4-bit and applying the LoRA adapter on top
+    # is the correct standard approach for QLoRA evaluation and avoids this issue.
+    if adapter_dir and Path(adapter_dir).exists():
+        tokenizer = _load_tokenizer(base_model)
+        model = _load_model_4bit(base_model)
+        model = PeftModel.from_pretrained(model, adapter_dir)
+        return tokenizer, model, "adapter"
+
+    # No adapter available: fall back to merged model (may fail if weights are uint8).
     merged_path = Path(merged_dir) if merged_dir else None
     if merged_path and _has_model_weights(merged_path):
         tokenizer = _load_tokenizer(merged_path.as_posix())
@@ -99,9 +113,6 @@ def load_finetuned_model(base_model: str, adapter_dir: str | None, merged_dir: s
 
     tokenizer = _load_tokenizer(base_model)
     model = _load_model_4bit(base_model)
-    if adapter_dir and Path(adapter_dir).exists():
-        model = PeftModel.from_pretrained(model, adapter_dir)
-        return tokenizer, model, "adapter"
     return tokenizer, model, "base"
 
 
