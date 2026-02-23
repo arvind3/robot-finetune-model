@@ -158,6 +158,15 @@ def main():
     parser.add_argument("--warmup-ratio", type=float, default=None)
     parser.add_argument("--lr-scheduler-type", type=str, default=None)
     parser.add_argument("--max-eval-tokens", type=int, default=None)
+    parser.add_argument(
+        "--smoke-test",
+        action="store_true",
+        help=(
+            "Quick validation run: caps training to 10 examples / 1 epoch, "
+            "eval to 3 samples / 64 tokens, skips HF upload.  Use this to "
+            "verify the full code path on Colab (~10 min) before a full run."
+        ),
+    )
     args = parser.parse_args()
 
     load_env()
@@ -174,6 +183,11 @@ def main():
     warmup_ratio = args.warmup_ratio if args.warmup_ratio is not None else float(cfg.get("warmup_ratio", 0.1))
     lr_scheduler_type = args.lr_scheduler_type or cfg.get("lr_scheduler_type", "cosine")
     max_eval_tokens = args.max_eval_tokens if args.max_eval_tokens is not None else int(cfg.get("max_eval_tokens", 768))
+
+    if args.smoke_test:
+        print("[SMOKE TEST] Overriding: 1 epoch, max_eval_tokens=64 for rapid validation.")
+        epochs = 1
+        max_eval_tokens = 64
 
     set_seed(seed)
 
@@ -204,6 +218,11 @@ def main():
     ds = load_dataset("json", data_files={"train": str(train_path), "eval": str(eval_path)})
     ds["train"] = format_dataset(ds["train"], tokenizer)
     ds["eval"] = format_dataset(ds["eval"], tokenizer)
+
+    if args.smoke_test:
+        ds["train"] = ds["train"].select(range(min(10, len(ds["train"]))))
+        ds["eval"] = ds["eval"].select(range(min(3, len(ds["eval"]))))
+        print(f"[SMOKE TEST] Dataset capped: {len(ds['train'])} train, {len(ds['eval'])} eval examples.")
 
     output_dir = Path(args.output_dir)
     safe_mkdir(output_dir)
@@ -286,6 +305,8 @@ def main():
     eval_suite_path = cfg.get("eval_suite_path")
     gate_mode = cfg.get("eval_gate_mode", "warn")
     max_eval_samples = int(cfg.get("eval_max_samples", 50))
+    if args.smoke_test:
+        max_eval_samples = 3
     min_robot_improvement = float(cfg.get("eval_min_robot_table_improvement", 0.05))
     min_instruction_improvement = float(cfg.get("eval_min_instruction_following_improvement", 0.03))
     max_disclaimer_drop = float(cfg.get("eval_max_unknown_disclaimer_drop", 0.02))
@@ -440,6 +461,14 @@ def main():
         tutorial_path="docs/using-finetuned-lora.md",
     )
     (upload_dir / "README.md").write_text(model_card, encoding="utf-8")
+
+    if args.smoke_test:
+        print("\n" + "=" * 60)
+        print("SMOKE TEST PASSED")
+        print("Full code path exercised: train → merge → eval → report.")
+        print("Safe to run the full training notebook.")
+        print("=" * 60)
+        return
 
     # Push to HF
     subprocess.run([
