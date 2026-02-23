@@ -63,10 +63,13 @@
     }
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
       width: 100%;
-      max-width: 900px;
+      max-width: 700px;
+    }
+    @media (max-width: 520px) {
+      .cards { grid-template-columns: 1fr; }
     }
     .card {
       background: #1e293b;
