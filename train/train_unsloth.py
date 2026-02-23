@@ -1,4 +1,5 @@
 import argparse
+import gc
 import json
 import os
 import shutil
@@ -256,6 +257,19 @@ def main():
         merged_ok = True
     except Exception:
         merged_ok = False
+
+    # Free all training artefacts from GPU before launching the eval subprocess.
+    # The parent process would otherwise hold ~7-9 GB of T4 VRAM (4-bit training
+    # model + merged fp16 weights), leaving the subprocess unable to load even one
+    # model for comparison evaluation.
+    del trainer
+    del model
+    del tokenizer
+    if merged_ok:
+        del merged
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     # Comparative eval report (new/legacy compatible)
     eval_dir = Path("eval")

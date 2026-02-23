@@ -1,4 +1,5 @@
 import argparse
+import gc
 import json
 import re
 import sys
@@ -55,23 +56,42 @@ def _model_input_device(model):
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+def _load_model_4bit(model_id: str):
+    """Load model in 4-bit (memory-efficient for constrained GPU e.g. T4) with fp16 fallback.
+
+    Without explicit quantization, from_pretrained defaults to fp32 (~12 GB for a 3B model),
+    which overflows a 14.56 GB T4 when the training process still holds GPU memory.
+    4-bit loads reduce each model to ~2.5 GB; fp16 fallback reduces to ~6 GB.
+    """
+    torch, _, AutoModelForCausalLM, _ = _runtime_deps()
+    try:
+        from transformers import BitsAndBytesConfig
+        bnb_cfg = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16)
+        return AutoModelForCausalLM.from_pretrained(
+            model_id, quantization_config=bnb_cfg, device_map="auto"
+        )
+    except Exception:
+        return AutoModelForCausalLM.from_pretrained(
+            model_id, device_map="auto", torch_dtype=torch.float16
+        )
+
+
 def load_base_model(base_model: str):
-    _, _, AutoModelForCausalLM, _ = _runtime_deps()
     tokenizer = _load_tokenizer(base_model)
-    model = AutoModelForCausalLM.from_pretrained(base_model, device_map="auto")
+    model = _load_model_4bit(base_model)
     return tokenizer, model
 
 
 def load_finetuned_model(base_model: str, adapter_dir: str | None, merged_dir: str | None):
-    _, PeftModel, AutoModelForCausalLM, _ = _runtime_deps()
+    _, PeftModel, _, _ = _runtime_deps()
     merged_path = Path(merged_dir) if merged_dir else None
     if merged_path and _has_model_weights(merged_path):
         tokenizer = _load_tokenizer(merged_path.as_posix())
-        model = AutoModelForCausalLM.from_pretrained(merged_path.as_posix(), device_map="auto")
+        model = _load_model_4bit(merged_path.as_posix())
         return tokenizer, model, "merged"
 
     tokenizer = _load_tokenizer(base_model)
-    model = AutoModelForCausalLM.from_pretrained(base_model, device_map="auto")
+    model = _load_model_4bit(base_model)
     if adapter_dir and Path(adapter_dir).exists():
         model = PeftModel.from_pretrained(model, adapter_dir)
         return tokenizer, model, "adapter"
@@ -580,6 +600,7 @@ def main():
     base_predictions = generate_predictions(eval_rows, base_tokenizer, base_model, args.max_new_tokens)
     del base_model
     torch, _, _, _ = _runtime_deps()
+    gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
