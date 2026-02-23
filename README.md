@@ -1,8 +1,34 @@
 # Robot Framework Expert Fine-Tune Pipeline
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Gate Status: PASS](https://img.shields.io/badge/Gate%20Status-PASS-22c55e)](perspectives/executive.html)
+[![Overall Score: +67%](https://img.shields.io/badge/Overall%20Score-%2B67%25-22c55e)](perspectives/executive.html)
 
 End-to-end, reproducible pipeline to build a Robot Framework + Python dataset, validate it, and generate a Colab notebook to fine-tune a small instruct model with Unsloth QLoRA. The workflow is designed to be lightweight locally and GPU-heavy only in Colab.
+
+## Run 1 Results — Fine-Tuned Model Impact
+
+> **Gate Status: PASS · All KPIs Positive**
+
+| KPI | Base | Fine-tuned | Delta |
+|---|---|---|---|
+| Robot syntax correctness | 40.7% | 48.1% | **+7.4%** |
+| Instruction following | 22.0% | 28.0% | **+6.0%** |
+| Unknown-topic disclaimer | 10.0% | 80.0% | **+70.0%** |
+| Overall composite score | 0.29 | 0.48 | **+67% relative** |
+
+Model on HuggingFace: [arvind3/robotframework-expert-qwen2.5-3b-lora](https://huggingface.co/arvind3/robotframework-expert-qwen2.5-3b-lora)
+
+### Perspectives (full reports)
+
+| Audience | Page | Summary |
+|---|---|---|
+| Leadership / Stakeholders | [Executive Summary](perspectives/executive.html) | KPI scorecard, gate status, recommended message |
+| Product / QA / Delivery | [Product Perspective](perspectives/product.html) | Before/after, user impact, use cases |
+| Architects / Tech Leads | [Capability Overview](perspectives/capability.html) | Domain scope, skill bars, safety behavior |
+| ML Engineers | [Engineering Deep-Dive](perspectives/engineering.html) | Hyperparameters, eval raw numbers, load code, next steps |
+
+---
 
 ## What this repo does
 

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Perspective — Robot Framework Expert Model</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0.875rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.15s; }
+    nav a:hover, nav a.active { color: #22c55e; }
+    nav .sep { color: #334155; }
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1a2744 100%);
+      border-bottom: 1px solid #1e3a5f;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #3b82f6;
+      color: #eff6ff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.75rem; }
+    .hero p { color: #94a3b8; font-size: 1rem; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+    .content { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1e293b; }
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 600px) { .before-after { grid-template-columns: 1fr; } }
+    .ba-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.875rem;
+      padding: 1.5rem;
+    }
+    .ba-card.after { border-color: #22c55e; background: #052e16; }
+    .ba-card .ba-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #475569;
+      margin-bottom: 0.875rem;
+    }
+    .ba-card.after .ba-label { color: #4ade80; }
+    .ba-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ba-card li { font-size: 0.875rem; color: #94a3b8; display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.5; }
+    .ba-card li::before { content: "✗"; color: #ef4444; flex-shrink: 0; }
+    .ba-card.after li::before { content: "✓"; color: #22c55e; }
+    .impact-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .impact-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.875rem;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .impact-card .num { font-size: 2rem; font-weight: 900; color: #22c55e; line-height: 1; }
+    .impact-card .lbl { font-size: 0.78rem; color: #64748b; margin-top: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .impact-card .sub { font-size: 0.75rem; color: #475569; margin-top: 0.2rem; }
+    .callout {
+      background: #1e293b;
+      border-left: 4px solid #3b82f6;
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.925rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+    .callout strong { color: #f1f5f9; }
+    .callout.green { border-left-color: #22c55e; }
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .use-case {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.875rem;
+      padding: 1.25rem;
+    }
+    .use-case .uc-title { font-size: 0.9rem; font-weight: 700; color: #f1f5f9; margin-bottom: 0.4rem; }
+    .use-case .uc-body { font-size: 0.825rem; color: #64748b; line-height: 1.5; }
+    .highlight-row {
+      background: linear-gradient(135deg, #052e16, #0a3d1a);
+      border: 1px solid #166534;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .highlight-row .big-num { font-size: 3.5rem; font-weight: 900; color: #22c55e; line-height: 1; flex-shrink: 0; }
+    .highlight-row .desc { color: #86efac; font-size: 0.95rem; line-height: 1.6; }
+    .highlight-row .desc strong { color: #f0fdf4; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">← All Perspectives</a>
+    <span class="sep">|</span>
+    <a href="executive.html">Executive</a>
+    <a href="product.html" class="active">Product</a>
+    <a href="capability.html">Capability</a>
+    <a href="engineering.html">Engineering</a>
+  </nav>
+
+  <div class="hero">
+    <span class="badge">Product Perspective</span>
+    <h1>What Changed for Users</h1>
+    <p>How fine-tuning improved day-to-day Robot Framework automation assistance — from code quality to safe boundary handling.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="highlight-row">
+      <div class="big-num">+70%</div>
+      <div class="desc">
+        <strong>The model now knows what it doesn't know.</strong><br>
+        When a user asks about something outside Robot Framework scope, the fine-tuned model adds a disclaimer or appropriately declines — 80% of the time, up from 10%. Users get honest, scoped answers instead of confidently wrong ones.
+      </div>
+    </div>
+
+    <section>
+      <h2>Before vs. After Fine-Tuning</h2>
+      <div class="before-after">
+        <div class="ba-card">
+          <div class="ba-label">Base Model (Before)</div>
+          <ul>
+            <li>Generates Robot Framework syntax incorrectly ~59% of the time</li>
+            <li>Answers out-of-scope questions confidently with no disclaimer (90% of cases)</li>
+            <li>Follows task instructions only 22% of the time</li>
+            <li>No domain specialization — generic LLM responses</li>
+          </ul>
+        </div>
+        <div class="ba-card after">
+          <div class="ba-label">Fine-tuned Model (After)</div>
+          <ul>
+            <li>Generates correct Robot Framework syntax 48% of the time (+7.4pp)</li>
+            <li>Appropriately declines or disclaims out-of-scope questions 80% of the time</li>
+            <li>Follows task instructions 28% of the time (+6pp)</li>
+            <li>Specialized for RF automation: keywords, test cases, libraries</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>User Impact by Area</h2>
+      <div class="impact-cards">
+        <div class="impact-card">
+          <div class="num">+7.4%</div>
+          <div class="lbl">Better Robot Syntax</div>
+          <div class="sub">More test cases & keywords that actually run</div>
+        </div>
+        <div class="impact-card">
+          <div class="num">+6%</div>
+          <div class="lbl">Task Adherence</div>
+          <div class="sub">Responses stay on topic, match the ask</div>
+        </div>
+        <div class="impact-card">
+          <div class="num">8 / 10</div>
+          <div class="lbl">Safety Rate</div>
+          <div class="sub">Out-of-scope handled with disclaimer</div>
+        </div>
+        <div class="impact-card">
+          <div class="num">+67%</div>
+          <div class="lbl">Overall Quality</div>
+          <div class="sub">Composite score 0.29 → 0.48</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Key Use Cases Improved</h2>
+      <div class="use-case-grid">
+        <div class="use-case">
+          <div class="uc-title">Writing Test Cases</div>
+          <div class="uc-body">The model now reliably produces <code>*** Test Cases ***</code> table structure, keywords, and correct spacing — the most common RF authoring task.</div>
+        </div>
+        <div class="use-case">
+          <div class="uc-title">Keyword Libraries</div>
+          <div class="uc-body">Custom keyword definitions with <code>*** Keywords ***</code> blocks are generated with proper indentation and argument handling.</div>
+        </div>
+        <div class="use-case">
+          <div class="uc-title">Scope Boundaries</div>
+          <div class="uc-body">When asked about unrelated topics (CI/CD infra, GPU issues, network config), the model now says so rather than hallucinating an answer.</div>
+        </div>
+        <div class="use-case">
+          <div class="uc-title">Instruction Following</div>
+          <div class="uc-body">Prompts like "write a keyword that opens a browser" now stay focused on the Robot Framework pattern instead of drifting to generic Python.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What's Not Changed Yet</h2>
+      <div class="callout">
+        <strong>These are areas for the next training iteration:</strong> Instruction following is improved (+6pp) but still at 28% — the model sometimes produces correct syntax in the wrong structure. Robot table correctness at 48% leaves room for improvement with more diverse training examples. Both are expected to improve with expanded dataset coverage.
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

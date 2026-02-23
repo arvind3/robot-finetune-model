@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineering Deep-Dive — Robot Framework Expert Model</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0.875rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.15s; }
+    nav a:hover, nav a.active { color: #22c55e; }
+    nav .sep { color: #334155; }
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1a2744 100%);
+      border-bottom: 1px solid #1e3a5f;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #f59e0b;
+      color: #1c1400;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.75rem; }
+    .hero p { color: #94a3b8; font-size: 1rem; max-width: 580px; margin: 0 auto; line-height: 1.6; }
+    .content { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1e293b; }
+    h3 { font-size: 0.95rem; font-weight: 700; color: #94a3b8; margin-bottom: 0.5rem; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .config-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.875rem;
+      padding: 1.25rem;
+    }
+    .config-card h3 { margin-top: 0; color: #f59e0b; }
+    .kv-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.75rem; }
+    .kv-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.85rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid #1e293b;
+    }
+    .kv-list li:last-child { border-bottom: none; }
+    .kv-key { color: #64748b; }
+    .kv-val { color: #e2e8f0; font-weight: 600; font-family: "Cascadia Code", "Fira Code", monospace; }
+    code {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 0.1rem 0.35rem;
+      border-radius: 0.25rem;
+      font-size: 0.82rem;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      color: #86efac;
+    }
+    pre {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      font-size: 0.82rem;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      color: #86efac;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .pipe-step {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-align: center;
+      min-width: 120px;
+    }
+    .pipe-step .ps-num { font-size: 0.65rem; color: #475569; margin-bottom: 0.2rem; }
+    .pipe-step .ps-title { font-weight: 700; color: #f1f5f9; font-size: 0.875rem; }
+    .pipe-arrow {
+      color: #334155;
+      font-size: 1.2rem;
+      padding: 0 0.25rem;
+      flex-shrink: 0;
+    }
+    .eval-table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th { text-align: left; padding: 0.625rem 0.875rem; background: #1e293b; color: #94a3b8; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    th:not(:first-child) { text-align: right; }
+    td { padding: 0.625rem 0.875rem; border-bottom: 1px solid #1e293b; }
+    td:not(:first-child) { text-align: right; }
+    tr:last-child td { border-bottom: none; }
+    .delta { color: #22c55e; font-weight: 700; }
+    .pass-badge {
+      display: inline-block;
+      background: #052e16;
+      color: #22c55e;
+      border: 1px solid #166534;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+    }
+    .callout {
+      background: #1e293b;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.925rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+    .callout.green { border-left-color: #22c55e; }
+    .callout strong { color: #f1f5f9; }
+    .artifact-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .artifact-links li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; }
+    .artifact-links a { color: #60a5fa; text-decoration: none; }
+    .artifact-links a:hover { color: #93c5fd; text-decoration: underline; }
+    .artifact-links .al-label { color: #64748b; font-size: 0.78rem; }
+    .bug-timeline { display: flex; flex-direction: column; gap: 0.75rem; }
+    .bug-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .bug-num {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #64748b;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .bug-item .bi-title { font-size: 0.875rem; color: #f1f5f9; font-weight: 600; }
+    .bug-item .bi-fix { font-size: 0.8rem; color: #22c55e; margin-top: 0.2rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } .pipeline { flex-direction: column; } .pipe-arrow { transform: rotate(90deg); } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">← All Perspectives</a>
+    <span class="sep">|</span>
+    <a href="executive.html">Executive</a>
+    <a href="product.html">Product</a>
+    <a href="capability.html">Capability</a>
+    <a href="engineering.html" class="active">Engineering</a>
+  </nav>
+
+  <div class="hero">
+    <span class="badge">Engineering Deep-Dive</span>
+    <h1>Training, Eval &amp; Artifacts</h1>
+    <p>Full technical record of this fine-tuning run: model, hyperparameters, evaluation methodology, bugs fixed, and next steps.</p>
+  </div>
+
+  <div class="content">
+
+    <section>
+      <h2>Training Pipeline</h2>
+      <div class="pipeline">
+        <div class="pipe-step"><div class="ps-num">1</div><div class="ps-title">Dataset</div>RF expert JSONL</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="ps-num">2</div><div class="ps-title">QLoRA</div>4-bit + Unsloth</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="ps-num">3</div><div class="ps-title">Merge</div>adapter → fp16</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="ps-num">4</div><div class="ps-title">Eval</div>50 suite prompts</div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step"><div class="ps-num">5</div><div class="ps-title">HF Upload</div>adapter + merged</div>
+      </div>
+      <div class="callout">
+        Training runs on <strong>Google Colab free tier (T4 GPU, 15 GB VRAM)</strong>. The eval subprocess is launched after
+        training completes with <strong>explicit GPU memory cleanup</strong> (<code>gc.collect() + torch.cuda.empty_cache()</code>)
+        to avoid OOM in the same process. The evaluator loads the base model and fine-tuned adapter in 4-bit quantization,
+        generating up to 768 tokens per prompt.
+      </div>
+    </section>
+
+    <section>
+      <h2>Hyperparameters</h2>
+      <div class="config-grid">
+        <div class="config-card">
+          <h3>Model</h3>
+          <ul class="kv-list">
+            <li><span class="kv-key">Base model</span><span class="kv-val">Qwen2.5-3B-Instruct</span></li>
+            <li><span class="kv-key">Adapter repo</span><span class="kv-val">qwen2.5-3b-lora</span></li>
+            <li><span class="kv-key">Max seq length</span><span class="kv-val">2048</span></li>
+            <li><span class="kv-key">Quantization</span><span class="kv-val">4-bit NF4</span></li>
+          </ul>
+        </div>
+        <div class="config-card">
+          <h3>LoRA</h3>
+          <ul class="kv-list">
+            <li><span class="kv-key">r (rank)</span><span class="kv-val">16</span></li>
+            <li><span class="kv-key">lora_alpha</span><span class="kv-val">32</span></li>
+            <li><span class="kv-key">lora_dropout</span><span class="kv-val">0.0</span></li>
+            <li><span class="kv-key">Bias</span><span class="kv-val">none</span></li>
+          </ul>
+        </div>
+        <div class="config-card">
+          <h3>Training</h3>
+          <ul class="kv-list">
+            <li><span class="kv-key">Epochs</span><span class="kv-val">3</span></li>
+            <li><span class="kv-key">Batch size</span><span class="kv-val">2 × grad_accum 4</span></li>
+            <li><span class="kv-key">Learning rate</span><span class="kv-val">2e-4</span></li>
+            <li><span class="kv-key">LR scheduler</span><span class="kv-val">cosine</span></li>
+            <li><span class="kv-key">Warmup ratio</span><span class="kv-val">0.1</span></li>
+            <li><span class="kv-key">Seed</span><span class="kv-val">42</span></li>
+          </ul>
+        </div>
+        <div class="config-card">
+          <h3>Evaluation</h3>
+          <ul class="kv-list">
+            <li><span class="kv-key">Eval samples</span><span class="kv-val">50</span></li>
+            <li><span class="kv-key">Max new tokens</span><span class="kv-val">768</span></li>
+            <li><span class="kv-key">Suite</span><span class="kv-val">eval_suite_v1.jsonl</span></li>
+            <li><span class="kv-key">Gate mode</span><span class="kv-val">warn</span></li>
+            <li><span class="kv-key">Finetuned source</span><span class="kv-val">adapter (preferred)</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Eval Results — Raw Numbers</h2>
+      <div class="eval-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Base</th><th>Fine-tuned</th><th>Delta</th><th>Threshold</th><th>Gate</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>robot_table_ok_rate</td>
+              <td>0.4074</td>
+              <td>0.4815</td>
+              <td class="delta">+0.0741</td>
+              <td>≥ 0.05</td>
+              <td><span class="pass-badge">PASS</span></td>
+            </tr>
+            <tr>
+              <td>instruction_following_ok_rate</td>
+              <td>0.2200</td>
+              <td>0.2800</td>
+              <td class="delta">+0.0600</td>
+              <td>≥ 0.03</td>
+              <td><span class="pass-badge">PASS</span></td>
+            </tr>
+            <tr>
+              <td>unknown_disclaimer_ok_rate</td>
+              <td>0.1000</td>
+              <td>0.8000</td>
+              <td class="delta">+0.7000</td>
+              <td>≥ −0.02</td>
+              <td><span class="pass-badge">PASS</span></td>
+            </tr>
+            <tr>
+              <td><strong>overall_score (weighted)</strong></td>
+              <td>0.2897</td>
+              <td>0.4847</td>
+              <td class="delta">+0.1950</td>
+              <td>—</td>
+              <td><span class="pass-badge">PASS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem;color:#475569;margin-top:0.5rem">
+        Overall score = 0.5 × robot_table + 0.3 × instruction_following + 0.2 × unknown_disclaimer.
+        Eval source: adapter (base 4-bit + PeftModel overlay). Samples: 50 from data/eval_suite_v1.jsonl.
+      </p>
+    </section>
+
+    <section>
+      <h2>Bugs Caught &amp; Fixed (This Run Series)</h2>
+      <div class="callout">
+        Three successive eval failures at minute 35 of a 90-minute Colab run prompted a <strong>two-tier pre-flight
+        testing framework</strong>: a local CPU test with gpt2 (~10 min) and a Colab smoke test with 10 training
+        examples (~10 min). Both must pass before a full run.
+      </div>
+      <div class="bug-timeline">
+        <div class="bug-item">
+          <span class="bug-num">Run 2</span>
+          <div>
+            <div class="bi-title">Eval loaded models in fp32 → 12 GB OOM on T4</div>
+            <div class="bi-fix">Fix: Added <code>BitsAndBytesConfig(load_in_4bit=True)</code> to eval loader + explicit GPU cleanup before subprocess.</div>
+          </div>
+        </div>
+        <div class="bug-item">
+          <span class="bug-num">Run 3a</span>
+          <div>
+            <div class="bi-title">torch_dtype deprecated in transformers ≥ 4.45 → TypeError</div>
+            <div class="bi-fix">Fix: Try <code>dtype=</code> first, fall back to <code>torch_dtype=</code> for older transformers.</div>
+          </div>
+        </div>
+        <div class="bug-item">
+          <span class="bug-num">Run 3b</span>
+          <div>
+            <div class="bi-title">Unsloth merge_and_unload() saves packed uint8 tensors → bitsandbytes error on reload</div>
+            <div class="bi-fix">Fix: Load finetuned model via adapter path only (base 4-bit + PeftModel). Merged weights never reloaded.</div>
+          </div>
+        </div>
+        <div class="bug-item">
+          <span class="bug-num">Run 3c</span>
+          <div>
+            <div class="bi-title">quantization_config carried over to merged model config.json → device placement crash</div>
+            <div class="bi-fix">Fix: Strip <code>quantization_config</code> from merged model config.json after saving.</div>
+          </div>
+        </div>
+        <div class="bug-item">
+          <span class="bug-num">Run 4</span>
+          <div>
+            <div class="bi-title">tools/package_run_artifacts.py not committed → Python exit 2 in notebook</div>
+            <div class="bi-fix">Fix: Committed missing script; made packaging step non-fatal (warn on failure).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Model Artifacts</h2>
+      <ul class="artifact-links">
+        <li>
+          <span>🤗</span>
+          <div>
+            <a href="https://huggingface.co/arvind3/robotframework-expert-qwen2.5-3b-lora" target="_blank">arvind3/robotframework-expert-qwen2.5-3b-lora</a>
+            <div class="al-label">Adapter + merged model + eval artifacts on HuggingFace</div>
+          </div>
+        </li>
+        <li>
+          <span>📊</span>
+          <div>
+            <span style="color:#e2e8f0">eval/report.md</span>
+            <div class="al-label">Qualitative output samples — base vs fine-tuned side by side</div>
+          </div>
+        </li>
+        <li>
+          <span>🔑</span>
+          <div>
+            <span style="color:#e2e8f0">eval/status.json</span>
+            <div class="al-label">Machine-readable gate result — use as release gate input</div>
+          </div>
+        </li>
+        <li>
+          <span>📦</span>
+          <div>
+            <span style="color:#e2e8f0">adapter/adapter_model.safetensors</span>
+            <div class="al-label">120 MB LoRA adapter — load with PeftModel.from_pretrained()</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Load the Adapter</h2>
+      <pre>from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+from peft import PeftModel
+import torch
+
+bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.float16)
+base = AutoModelForCausalLM.from_pretrained(
+    "Qwen/Qwen2.5-3B-Instruct", quantization_config=bnb, device_map="auto"
+)
+model = PeftModel.from_pretrained(
+    base, "arvind3/robotframework-expert-qwen2.5-3b-lora/adapter"
+)
+tokenizer = AutoTokenizer.from_pretrained(
+    "arvind3/robotframework-expert-qwen2.5-3b-lora/adapter"
+)
+
+prompt = "Write a Robot Framework test case that logs Hello World."
+messages = [{"role": "user", "content": prompt}]
+ids = tokenizer.apply_chat_template(messages, return_tensors="pt").to(model.device)
+out = model.generate(ids, max_new_tokens=256)
+print(tokenizer.decode(out[0], skip_special_tokens=True))</pre>
+    </section>
+
+    <section>
+      <h2>Next Steps</h2>
+      <div class="two-col">
+        <div class="callout green" style="margin-bottom:0">
+          <strong>Expand training data.</strong> Robot table correctness at 48% and instruction following at 28% both improve with more diverse, higher-quality examples. Target: 500+ training pairs covering edge cases and multi-step prompts.
+        </div>
+        <div class="callout green" style="margin-bottom:0">
+          <strong>Run 3 epochs with larger batch.</strong> Current setup: batch=2, grad_accum=4. A T4 with 15 GB can support batch=4, halving training steps per epoch and improving gradient stability.
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

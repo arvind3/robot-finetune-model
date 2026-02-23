@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Executive Summary — Robot Framework Expert Model</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0.875rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    nav a:hover, nav a.active { color: #22c55e; }
+    nav .sep { color: #334155; }
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1a2744 100%);
+      border-bottom: 1px solid #1e3a5f;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #22c55e;
+      color: #052e16;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      color: #94a3b8;
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    .big-number-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .big-number {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.875rem;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+    }
+    .big-number .num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #22c55e;
+      line-height: 1;
+    }
+    .big-number.highlight {
+      border-color: #22c55e;
+      background: #052e16;
+    }
+    .big-number.highlight .num { font-size: 3.25rem; }
+    .big-number .kpi-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .big-number .kpi-sub {
+      font-size: 0.75rem;
+      color: #475569;
+      margin-top: 0.25rem;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #1e293b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.625rem 0.875rem;
+      background: #1e293b;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    th:not(:first-child) { text-align: right; }
+    td {
+      padding: 0.75rem 0.875rem;
+      border-bottom: 1px solid #1e293b;
+      color: #e2e8f0;
+    }
+    td:not(:first-child) { text-align: right; }
+    tr:last-child td { border-bottom: none; }
+    .delta { color: #22c55e; font-weight: 700; }
+    .signal {
+      display: inline-block;
+      background: #052e16;
+      color: #22c55e;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid #166534;
+    }
+    .callout {
+      background: #1e293b;
+      border-left: 4px solid #22c55e;
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
+    .callout strong { color: #f1f5f9; }
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .check-list li::before {
+      content: "✓";
+      color: #22c55e;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+    .standout-box {
+      background: linear-gradient(135deg, #052e16, #0a3d1a);
+      border: 1px solid #166534;
+      border-radius: 1rem;
+      padding: 1.75rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+    .standout-box .big { font-size: 4.5rem; font-weight: 900; color: #22c55e; line-height: 1; }
+    .standout-box .label { color: #86efac; font-size: 1rem; margin-top: 0.5rem; font-weight: 600; }
+    .standout-box .sub { color: #4ade80; font-size: 0.85rem; margin-top: 0.4rem; opacity: 0.8; }
+    .back-link { color: #475569; text-decoration: none; font-size: 0.8rem; }
+    .back-link:hover { color: #22c55e; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">← All Perspectives</a>
+    <span class="sep">|</span>
+    <a href="executive.html" class="active">Executive</a>
+    <a href="product.html">Product</a>
+    <a href="capability.html">Capability</a>
+    <a href="engineering.html">Engineering</a>
+  </nav>
+
+  <div class="hero">
+    <span class="badge">✓ Gate Status: PASS · KPI Coverage: Full</span>
+    <h1>Executive Summary</h1>
+    <p>Fine-tuned model impact versus baseline — Qwen2.5-3B-Instruct, evaluated on 50 domain-specific Robot Framework prompts.</p>
+  </div>
+
+  <div class="content">
+
+    <div class="standout-box">
+      <div class="big">+67%</div>
+      <div class="label">Overall composite quality improvement</div>
+      <div class="sub">Composite score: 0.29 (base) → 0.48 (fine-tuned) · All quality gates passed</div>
+    </div>
+
+    <div class="big-number-row">
+      <div class="big-number">
+        <div class="num">+7.4%</div>
+        <div class="kpi-label">Robot Syntax Correctness</div>
+        <div class="kpi-sub">40.7% → 48.1%</div>
+      </div>
+      <div class="big-number">
+        <div class="num">+6%</div>
+        <div class="kpi-label">Instruction Following</div>
+        <div class="kpi-sub">22% → 28%</div>
+      </div>
+      <div class="big-number highlight">
+        <div class="num">+70%</div>
+        <div class="kpi-label">Domain Safety Behavior</div>
+        <div class="kpi-sub">10% → 80% · Standout result</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>KPI Scorecard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>KPI</th>
+            <th>Base Model</th>
+            <th>Fine-tuned</th>
+            <th>Delta</th>
+            <th>Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Robot table correctness</td>
+            <td>40.74%</td>
+            <td>48.15%</td>
+            <td class="delta">+7.41%</td>
+            <td><span class="signal">Positive</span></td>
+          </tr>
+          <tr>
+            <td>Instruction following</td>
+            <td>22.00%</td>
+            <td>28.00%</td>
+            <td class="delta">+6.00%</td>
+            <td><span class="signal">Positive</span></td>
+          </tr>
+          <tr>
+            <td>Unknown-topic disclaimer</td>
+            <td>10.00%</td>
+            <td>80.00%</td>
+            <td class="delta">+70.00%</td>
+            <td><span class="signal">Positive</span></td>
+          </tr>
+          <tr>
+            <td><strong>Overall composite score</strong></td>
+            <td>0.2897</td>
+            <td>0.4847</td>
+            <td class="delta">+0.1950</td>
+            <td><span class="signal">Positive</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Standout Result: Domain Safety</h2>
+      <div class="callout">
+        The biggest win is <strong>unknown-topic disclaimer behavior</strong>. When asked something outside Robot Framework scope
+        (e.g. "debug my GPU drivers"), the <strong>base model answered confidently 90% of the time</strong> — generating
+        plausible but wrong guidance. The <strong>fine-tuned model now correctly adds a disclaimer or declines 80% of the time</strong>.
+        This is the domain-awareness and safety behavior the training data was explicitly designed to teach.
+      </div>
+    </section>
+
+    <section>
+      <h2>Quality Gate</h2>
+      <ul class="check-list">
+        <li>Robot syntax improvement ≥ 5% required · Achieved 7.41% ✓</li>
+        <li>Instruction following improvement ≥ 3% required · Achieved 6.00% ✓</li>
+        <li>Disclaimer behavior must not drop · Improved by 70% ✓</li>
+        <li>No failed checks · Gate mode: WARN · Status: <strong style="color:#22c55e">PASS</strong></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Recommended Message</h2>
+      <div class="callout">
+        <strong>The fine-tuned model demonstrates positive quality movement on all measured KPIs.</strong>
+        It is ready for promotion decisions. Use <code>eval/report.md</code> for qualitative examples
+        and <code>eval/status.json</code> as the formal release gate input.
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

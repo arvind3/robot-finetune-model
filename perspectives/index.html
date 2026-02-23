@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Framework Expert Model — Perspectives</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #22c55e;
+      color: #052e16;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      color: #f8fafc;
+    }
+    .subtitle {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+      max-width: 520px;
+    }
+    .headline-stat {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .headline-stat .number {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #22c55e;
+      line-height: 1;
+    }
+    .headline-stat .label {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-top: 0.4rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      padding: 1.75rem 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .card:hover {
+      border-color: #22c55e;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(34,197,94,0.15);
+    }
+    .card-icon { font-size: 1.8rem; }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .card-desc {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .card-audience {
+      font-size: 0.75rem;
+      color: #22c55e;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid #1e3a5f33;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      color: #334155;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <span class="badge">✓ Gate Status: PASS · All KPIs Positive</span>
+
+  <h1>Robot Framework Expert Model</h1>
+  <p class="subtitle">
+    QLoRA fine-tuned from Qwen2.5-3B-Instruct · Evaluated on 50 domain-specific prompts
+  </p>
+
+  <div class="headline-stat">
+    <div class="number">+67%</div>
+    <div class="label">Overall composite quality improvement</div>
+  </div>
+
+  <div class="cards">
+    <a class="card" href="executive.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Executive Summary</div>
+      <div class="card-desc">KPI impact, gate status, and the one number that matters most.</div>
+      <div class="card-audience">For: Leadership / Stakeholders</div>
+    </a>
+    <a class="card" href="product.html">
+      <div class="card-icon">🚀</div>
+      <div class="card-title">Product Perspective</div>
+      <div class="card-desc">What changed for users of Robot Framework automation tooling.</div>
+      <div class="card-audience">For: Product / QA / Delivery</div>
+    </a>
+    <a class="card" href="capability.html">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">Capability Overview</div>
+      <div class="card-desc">What the model can and cannot do — domain scope and safety behavior.</div>
+      <div class="card-audience">For: Architects / Tech Leads</div>
+    </a>
+    <a class="card" href="engineering.html">
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">Engineering Deep-Dive</div>
+      <div class="card-desc">Training setup, eval methodology, model artifacts, and next steps.</div>
+      <div class="card-audience">For: ML Engineers / Developers</div>
+    </a>
+  </div>
+
+  <footer>
+    Model: <a href="https://huggingface.co/arvind3/robotframework-expert-qwen2.5-3b-lora" style="color:#475569">arvind3/robotframework-expert-qwen2.5-3b-lora</a>
+    &nbsp;·&nbsp; Eval suite: data/eval_suite_v1.jsonl &nbsp;·&nbsp; Run date: 2026-02-23
+  </footer>
+</body>
+</html>
