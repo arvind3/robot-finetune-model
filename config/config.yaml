@@ -2,12 +2,34 @@ base_model: Qwen/Qwen2.5-3B-Instruct
 fallback_model: Qwen/Qwen2.5-1.5B-Instruct
 hf_model_repo: arvind3/robotframework-expert-qwen2.5-3b-lora
 hf_dataset_repo: arvind3/robotframework-expert-dataset
+eval_suite_path: data/eval_suite_v1.jsonl
+eval_gate_mode: warn
+eval_min_robot_table_improvement: 0.05
+eval_min_instruction_following_improvement: 0.03
+eval_max_unknown_disclaimer_drop: 0.02
+eval_max_samples: 50
+eval_require_full_metrics: true
+auto_fetch_official_docs: true
+require_doc_sources: true
+official_doc_urls:
+  - https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
+  - https://robotframework.org/robotframework/latest/libraries/BuiltIn.html
+  - https://robotframework.org/robotframework/latest/libraries/Collections.html
+  - https://robotframework.org/robotframework/latest/libraries/OperatingSystem.html
+  - https://robotframework.org/robotframework/latest/libraries/String.html
+  - https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
+  - https://marketsquare.github.io/robotframework-requests/doc/RequestsLibrary.html
 seed: 42
 eval_size: 50
 synthetic_count: 200
 max_doc_chunks: 1000
 max_seq_length: 2048
+max_eval_tokens: 768
 lora_r: 16
 lora_alpha: 32
-lora_dropout: 0.05
+lora_dropout: 0.0
+strip_code_fences_from_md: false
+warmup_ratio: 0.1
+lr_scheduler_type: cosine
+epochs: 3
 github_repo_url: https://github.com/arvind3/robot-finetune-model.git

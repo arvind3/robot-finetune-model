@@ -1,0 +1,30 @@
+Robot Framework Authoritative Practices Checklist
+Sources:
+- https://robotframework.org/
+- https://docs.robotframework.org/
+- https://robotframework.org/robotframework/latest/libraries/BuiltIn.html
+
+1) Structure
+- Keep test suites modular.
+- Use resource files for reusable keywords.
+- Prefer descriptive test names and keyword names.
+
+2) Reliability
+- Prefer condition-based waits over fixed sleep.
+- Use retry wrappers for unstable external systems.
+- Capture context in teardown when tests fail.
+
+3) Data and Variables
+- Keep test data separate from test logic where possible.
+- Use Variables/Collections libraries for explicit data handling.
+
+4) Diagnostics
+- Log key checkpoints.
+- Start debugging with library/resource import validation.
+- Reproduce failures with minimal cases.
+
+5) Governance
+- Use tags for targeted execution.
+- Keep a stable evaluation suite separate from train prompts.
+- Gate promotion on comparative metrics and qualitative review.
+

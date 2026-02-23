@@ -123,5 +123,509 @@
     "assistant": "Example:\n```robot\n*** Settings ***\nDocumentation    Verifies critical login behavior.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Ensures valid users can sign in.\n    Log    login ok\n```",
     "robot_snippet": "*** Settings ***\nDocumentation    Verifies critical login behavior.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Ensures valid users can sign in.\n    Log    login ok",
     "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-017",
+    "topic": "best_practices",
+    "user": "Show a complete suite skeleton with library imports, variables, setup, and keywords.",
+    "assistant": "Full suite skeleton:\n```robot\n*** Settings ***\nDocumentation    User account management tests.\nLibrary    SeleniumLibrary\nLibrary    Collections\nResource    resources/common.robot\nVariables    variables/env.py\nSuite Setup    Open App Browser\nSuite Teardown    Close App Browser\nTest Teardown    Run Keyword If Test Failed    Capture Page Screenshot\n\n*** Variables ***\n${ADMIN_USER}    admin\n\n*** Test Cases ***\nCreate User Account\n    [Documentation]    Verifies an admin can create a new user.\n    [Tags]    smoke    users\n    Log    placeholder\n```",
+    "robot_snippet": "*** Settings ***\nDocumentation    User account management tests.\nLibrary    SeleniumLibrary\nResource    resources/common.robot\nSuite Setup    Open App Browser\nSuite Teardown    Close App Browser\nTest Teardown    Run Keyword If Test Failed    Capture Page Screenshot\n\n*** Variables ***\n${ADMIN_USER}    admin\n\n*** Test Cases ***\nCreate User Account\n    [Documentation]    Verifies an admin can create a new user.\n    [Tags]    smoke    users\n    Log    placeholder",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "bp-018",
+    "topic": "best_practices",
+    "user": "What are the key differences between Test Setup and Suite Setup in Robot Framework?",
+    "assistant": "Suite Setup runs once before all tests in a suite, making it ideal for expensive shared setup such as opening a browser or a database connection. Test Setup runs before each individual test and is suited for per-test state initialization. Similarly, Suite Teardown runs once after all tests, while Test Teardown runs after each. Use Suite-level for lifecycle and Test-level for state isolation:\n```robot\n*** Settings ***\nSuite Setup    Open Shared Connection\nSuite Teardown    Close Shared Connection\nTest Setup    Reset Test State\nTest Teardown    Log Test Result\n```",
+    "robot_snippet": "*** Settings ***\nSuite Setup    Open Shared Connection\nSuite Teardown    Close Shared Connection\nTest Setup    Reset Test State\nTest Teardown    Log Test Result",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-001",
+    "topic": "for_loops",
+    "user": "Show a FOR loop that iterates over a list variable and logs each item.",
+    "assistant": "Example iterating over a list:\n```robot\n*** Variables ***\n@{FRUITS}    apple    banana    cherry\n\n*** Test Cases ***\nLog All Fruits\n    FOR    ${fruit}    IN    @{FRUITS}\n        Log    ${fruit}\n    END\n```",
+    "robot_snippet": "*** Variables ***\n@{FRUITS}    apple    banana    cherry\n\n*** Test Cases ***\nLog All Fruits\n    FOR    ${fruit}    IN    @{FRUITS}\n        Log    ${fruit}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-002",
+    "topic": "for_loops",
+    "user": "Show a FOR loop with IN RANGE and a counter variable.",
+    "assistant": "Example with IN RANGE:\n```robot\n*** Test Cases ***\nCount To Five\n    FOR    ${i}    IN RANGE    1    6\n        Log    Iteration ${i}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nCount To Five\n    FOR    ${i}    IN RANGE    1    6\n        Log    Iteration ${i}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-003",
+    "topic": "for_loops",
+    "user": "How do I break out of a FOR loop early in Robot Framework?",
+    "assistant": "Use BREAK to exit the loop early:\n```robot\n*** Test Cases ***\nFind First Match\n    FOR    ${item}    IN    red    green    blue\n        IF    '${item}' == 'green'\n            Log    Found: ${item}\n            BREAK\n        END\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nFind First Match\n    FOR    ${item}    IN    red    green    blue\n        IF    '${item}' == 'green'\n            Log    Found: ${item}\n            BREAK\n        END\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-004",
+    "topic": "for_loops",
+    "user": "Show a FOR loop with CONTINUE to skip certain items.",
+    "assistant": "Use CONTINUE to skip iterations:\n```robot\n*** Test Cases ***\nSkip Odd Numbers\n    FOR    ${n}    IN RANGE    1    8\n        IF    ${n} % 2 != 0\n            CONTINUE\n        END\n        Log    Even: ${n}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nSkip Odd Numbers\n    FOR    ${n}    IN RANGE    1    8\n        IF    ${n} % 2 != 0\n            CONTINUE\n        END\n        Log    Even: ${n}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-005",
+    "topic": "for_loops",
+    "user": "Show a WHILE loop in Robot Framework with a limit.",
+    "assistant": "Example WHILE loop with limit:\n```robot\n*** Test Cases ***\nWait For Counter\n    ${count}=    Set Variable    0\n    WHILE    ${count} < 5    limit=10\n        ${count}=    Evaluate    ${count} + 1\n        Log    count=${count}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nWait For Counter\n    ${count}=    Set Variable    0\n    WHILE    ${count} < 5    limit=10\n        ${count}=    Evaluate    ${count} + 1\n        Log    count=${count}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-006",
+    "topic": "for_loops",
+    "user": "Iterate over a dictionary in a FOR loop and log key-value pairs.",
+    "assistant": "Use &{} syntax for dictionary iteration:\n```robot\n*** Variables ***\n&{CONFIG}    host=localhost    port=8080\n\n*** Test Cases ***\nLog Config\n    FOR    ${key}    ${value}    IN    &{CONFIG}\n        Log    ${key}=${value}\n    END\n```",
+    "robot_snippet": "*** Variables ***\n&{CONFIG}    host=localhost    port=8080\n\n*** Test Cases ***\nLog Config\n    FOR    ${key}    ${value}    IN    &{CONFIG}\n        Log    ${key}=${value}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "fl-007",
+    "topic": "for_loops",
+    "user": "Show nested FOR loops for a grid-style iteration.",
+    "assistant": "Nested FOR loops example:\n```robot\n*** Test Cases ***\nGrid Iteration\n    FOR    ${row}    IN RANGE    1    4\n        FOR    ${col}    IN RANGE    1    4\n            Log    cell(${row},${col})\n        END\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nGrid Iteration\n    FOR    ${row}    IN RANGE    1    4\n        FOR    ${col}    IN RANGE    1    4\n            Log    cell(${row},${col})\n        END\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-001",
+    "topic": "try_except",
+    "user": "Show a TRY/EXCEPT block in Robot Framework to catch a keyword failure.",
+    "assistant": "TRY/EXCEPT example:\n```robot\n*** Test Cases ***\nSafe API Call\n    TRY\n        Call Flaky API\n    EXCEPT    Connection refused\n        Log    API unavailable; skipping.\n    END\n\n*** Keywords ***\nCall Flaky API\n    Log    calling\n```",
+    "robot_snippet": "*** Test Cases ***\nSafe API Call\n    TRY\n        Call Flaky API\n    EXCEPT    Connection refused\n        Log    API unavailable; skipping.\n    END\n\n*** Keywords ***\nCall Flaky API\n    Log    calling",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-002",
+    "topic": "try_except",
+    "user": "How do I use EXCEPT to catch any error and log the message?",
+    "assistant": "Catch any exception with a wildcard:\n```robot\n*** Test Cases ***\nCatch Any Error\n    TRY\n        Fail    Something went wrong\n    EXCEPT    AS    ${err}\n        Log    Caught: ${err}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nCatch Any Error\n    TRY\n        Fail    Something went wrong\n    EXCEPT    AS    ${err}\n        Log    Caught: ${err}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-003",
+    "topic": "try_except",
+    "user": "Show TRY/EXCEPT/ELSE/FINALLY pattern in Robot Framework.",
+    "assistant": "Full TRY/EXCEPT/ELSE/FINALLY pattern:\n```robot\n*** Test Cases ***\nFull Error Handling\n    TRY\n        Log    attempt\n    EXCEPT\n        Log    error path\n    ELSE\n        Log    success path\n    FINALLY\n        Log    always runs\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nFull Error Handling\n    TRY\n        Log    attempt\n    EXCEPT\n        Log    error path\n    ELSE\n        Log    success path\n    FINALLY\n        Log    always runs\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-004",
+    "topic": "try_except",
+    "user": "How do I catch multiple specific error types in one TRY block?",
+    "assistant": "Use multiple EXCEPT clauses:\n```robot\n*** Test Cases ***\nMultiple Error Types\n    TRY\n        Call Service\n    EXCEPT    Timeout*    type=GLOB\n        Log    Timeout error\n    EXCEPT    Auth*    type=GLOB\n        Log    Auth error\n    END\n\n*** Keywords ***\nCall Service\n    Log    calling\n```",
+    "robot_snippet": "*** Test Cases ***\nMultiple Error Types\n    TRY\n        Call Service\n    EXCEPT    Timeout*    type=GLOB\n        Log    Timeout error\n    EXCEPT    Auth*    type=GLOB\n        Log    Auth error\n    END\n\n*** Keywords ***\nCall Service\n    Log    calling",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-005",
+    "topic": "try_except",
+    "user": "Show how to re-raise an exception after logging in a TRY/EXCEPT block.",
+    "assistant": "Re-raise with FAIL after logging the caught message:\n```robot\n*** Test Cases ***\nLog And Reraise\n    TRY\n        Fail    original error\n    EXCEPT    AS    ${msg}\n        Log    Logging before reraise: ${msg}\n        Fail    ${msg}\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nLog And Reraise\n    TRY\n        Fail    original error\n    EXCEPT    AS    ${msg}\n        Log    Logging before reraise: ${msg}\n        Fail    ${msg}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "te-006",
+    "topic": "try_except",
+    "user": "Use TRY/EXCEPT inside a keyword for safe cleanup even if the main action fails.",
+    "assistant": "Error-safe keyword pattern:\n```robot\n*** Keywords ***\nSafe Cleanup Keyword\n    TRY\n        Do Main Action\n    EXCEPT\n        Log    Main action failed; running cleanup.\n    FINALLY\n        Do Cleanup\n    END\n\nDo Main Action\n    Log    main\n\nDo Cleanup\n    Log    cleanup\n```",
+    "robot_snippet": "*** Keywords ***\nSafe Cleanup Keyword\n    TRY\n        Do Main Action\n    EXCEPT\n        Log    Main action failed; running cleanup.\n    FINALLY\n        Do Cleanup\n    END\n\nDo Main Action\n    Log    main\n\nDo Cleanup\n    Log    cleanup",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-001",
+    "topic": "selenium_library",
+    "user": "Show a minimal SeleniumLibrary test that opens a URL and asserts a title.",
+    "assistant": "Minimal SeleniumLibrary example:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\nSuite Teardown    Close All Browsers\n\n*** Test Cases ***\nVerify Homepage Title\n    Open Browser    https://example.com    chrome\n    Title Should Be    Example Domain\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\nSuite Teardown    Close All Browsers\n\n*** Test Cases ***\nVerify Homepage Title\n    Open Browser    https://example.com    chrome\n    Title Should Be    Example Domain",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-002",
+    "topic": "selenium_library",
+    "user": "How do I fill in a form and click a submit button using SeleniumLibrary?",
+    "assistant": "Form interaction example:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nSubmit Login Form\n    Open Browser    https://example.com/login    chrome\n    Input Text    id=username    testuser\n    Input Password    id=password    secret\n    Click Button    id=submit\n    Wait Until Page Contains    Welcome\n    [Teardown]    Close Browser\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nSubmit Login Form\n    Open Browser    https://example.com/login    chrome\n    Input Text    id=username    testuser\n    Input Password    id=password    secret\n    Click Button    id=submit\n    Wait Until Page Contains    Welcome\n    [Teardown]    Close Browser",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-003",
+    "topic": "selenium_library",
+    "user": "Show how to wait for an element to be visible before clicking it in SeleniumLibrary.",
+    "assistant": "Wait before interact pattern:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nClick After Wait\n    Open Browser    https://example.com    chrome\n    Wait Until Element Is Visible    id=loadedBtn    timeout=10s\n    Click Element    id=loadedBtn\n    [Teardown]    Close Browser\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nClick After Wait\n    Open Browser    https://example.com    chrome\n    Wait Until Element Is Visible    id=loadedBtn    timeout=10s\n    Click Element    id=loadedBtn\n    [Teardown]    Close Browser",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-004",
+    "topic": "selenium_library",
+    "user": "How do I take a screenshot on test failure in SeleniumLibrary?",
+    "assistant": "Capture screenshot in teardown:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nLogin Test\n    Open Browser    https://example.com/login    chrome\n    Input Text    id=user    admin\n    Click Button    id=go\n    [Teardown]    Run Keyword If Test Failed    Capture Page Screenshot\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nLogin Test\n    Open Browser    https://example.com/login    chrome\n    Input Text    id=user    admin\n    Click Button    id=go\n    [Teardown]    Run Keyword If Test Failed    Capture Page Screenshot",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-005",
+    "topic": "selenium_library",
+    "user": "How do I use SeleniumLibrary with a Page Object resource file pattern?",
+    "assistant": "Page Object resource pattern:\n\nResource file `resources/login_page.robot`:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Keywords ***\nOpen Login Page\n    Go To    https://example.com/login\n\nEnter Credentials\n    [Arguments]    ${user}    ${pass}\n    Input Text    id=username    ${user}\n    Input Password    id=password    ${pass}\n\nSubmit Login\n    Click Button    id=submit\n```\n\nMain suite:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\nResource    resources/login_page.robot\nSuite Setup    Open Browser    about:blank    chrome\nSuite Teardown    Close All Browsers\n\n*** Test Cases ***\nLogin With Valid Creds\n    Open Login Page\n    Enter Credentials    admin    s3cret\n    Submit Login\n    Wait Until Page Contains    Dashboard\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Keywords ***\nOpen Login Page\n    Go To    https://example.com/login\n\nEnter Credentials\n    [Arguments]    ${user}    ${pass}\n    Input Text    id=username    ${user}\n    Input Password    id=password    ${pass}\n\nSubmit Login\n    Click Button    id=submit",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-006",
+    "topic": "selenium_library",
+    "user": "Show how to handle a dropdown select and verify its value using SeleniumLibrary.",
+    "assistant": "Dropdown example:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nSelect Country Dropdown\n    Open Browser    https://example.com/form    chrome\n    Select From List By Label    id=country    Germany\n    ${val}=    Get Selected List Label    id=country\n    Should Be Equal    ${val}    Germany\n    [Teardown]    Close Browser\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nSelect Country Dropdown\n    Open Browser    https://example.com/form    chrome\n    Select From List By Label    id=country    Germany\n    ${val}=    Get Selected List Label    id=country\n    Should Be Equal    ${val}    Germany\n    [Teardown]    Close Browser",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "sl-007",
+    "topic": "selenium_library",
+    "user": "How do I assert that an element contains specific text using SeleniumLibrary?",
+    "assistant": "Element text assertion:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nVerify Welcome Message\n    Open Browser    https://example.com    chrome\n    Wait Until Element Is Visible    id=welcome-msg\n    Element Should Contain    id=welcome-msg    Welcome\n    [Teardown]    Close Browser\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Test Cases ***\nVerify Welcome Message\n    Open Browser    https://example.com    chrome\n    Wait Until Element Is Visible    id=welcome-msg\n    Element Should Contain    id=welcome-msg    Welcome\n    [Teardown]    Close Browser",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-001",
+    "topic": "requests_library",
+    "user": "Show a minimal RequestsLibrary GET request test that checks status code 200.",
+    "assistant": "Minimal GET request:\n```robot\n*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nVerify API Health\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    GET On Session    api    /todos/1\n    Should Be Equal As Integers    ${resp.status_code}    200\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nVerify API Health\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    GET On Session    api    /todos/1\n    Should Be Equal As Integers    ${resp.status_code}    200",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-002",
+    "topic": "requests_library",
+    "user": "Show a POST request with JSON body using RequestsLibrary.",
+    "assistant": "POST with JSON body:\n```robot\n*** Settings ***\nLibrary    Collections\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nCreate New Post\n    ${body}=    Create Dictionary    title=foo    body=bar    userId=1\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    POST On Session    api    /posts    json=${body}\n    Should Be Equal As Integers    ${resp.status_code}    201\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nCreate New Post\n    ${body}=    Create Dictionary    title=foo    body=bar    userId=1\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    POST On Session    api    /posts    json=${body}\n    Should Be Equal As Integers    ${resp.status_code}    201",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-003",
+    "topic": "requests_library",
+    "user": "How do I add Bearer token authentication headers in a RequestsLibrary session?",
+    "assistant": "Bearer token auth:\n```robot\n*** Settings ***\nLibrary    Collections\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nAuthenticated Request\n    ${headers}=    Create Dictionary    Authorization=Bearer mytoken123\n    Create Session    api    https://api.example.com    headers=${headers}\n    ${resp}=    GET On Session    api    /profile\n    Should Be Equal As Integers    ${resp.status_code}    200\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nAuthenticated Request\n    ${headers}=    Create Dictionary    Authorization=Bearer mytoken123\n    Create Session    api    https://api.example.com    headers=${headers}\n    ${resp}=    GET On Session    api    /profile\n    Should Be Equal As Integers    ${resp.status_code}    200",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-004",
+    "topic": "requests_library",
+    "user": "Parse a JSON response field and assert its value using RequestsLibrary.",
+    "assistant": "JSON response assertion:\n```robot\n*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nAssert Response Field\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    GET On Session    api    /todos/1\n    ${body}=    Set Variable    ${resp.json()}\n    Should Be Equal As Integers    ${body}[id]    1\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nAssert Response Field\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    GET On Session    api    /todos/1\n    ${body}=    Set Variable    ${resp.json()}\n    Should Be Equal As Integers    ${body}[id]    1",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-005",
+    "topic": "requests_library",
+    "user": "How do I reuse a session across multiple test cases for efficiency?",
+    "assistant": "Session sharing via suite setup:\n```robot\n*** Settings ***\nLibrary    RequestsLibrary\nSuite Setup    Create Shared Session\nSuite Teardown    Delete All Sessions\n\n*** Test Cases ***\nFirst Endpoint\n    ${r}=    GET On Session    shared    /todos/1\n    Should Be Equal As Integers    ${r.status_code}    200\n\nSecond Endpoint\n    ${r}=    GET On Session    shared    /todos/2\n    Should Be Equal As Integers    ${r.status_code}    200\n\n*** Keywords ***\nCreate Shared Session\n    Create Session    shared    https://jsonplaceholder.typicode.com\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    RequestsLibrary\nSuite Setup    Create Shared Session\nSuite Teardown    Delete All Sessions\n\n*** Test Cases ***\nFirst Endpoint\n    ${r}=    GET On Session    shared    /todos/1\n    Should Be Equal As Integers    ${r.status_code}    200\n\nSecond Endpoint\n    ${r}=    GET On Session    shared    /todos/2\n    Should Be Equal As Integers    ${r.status_code}    200\n\n*** Keywords ***\nCreate Shared Session\n    Create Session    shared    https://jsonplaceholder.typicode.com",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-006",
+    "topic": "requests_library",
+    "user": "Show a DELETE request and verify 200 or 204 response using RequestsLibrary.",
+    "assistant": "DELETE request example:\n```robot\n*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nDelete A Resource\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    DELETE On Session    api    /posts/1\n    Should Be True    ${resp.status_code} in [200, 204]\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nDelete A Resource\n    Create Session    api    https://jsonplaceholder.typicode.com\n    ${resp}=    DELETE On Session    api    /posts/1\n    Should Be True    ${resp.status_code} in [200, 204]",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rl-007",
+    "topic": "requests_library",
+    "user": "Show how to set a request timeout and handle timeout errors in RequestsLibrary.",
+    "assistant": "Request timeout pattern:\n```robot\n*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nRequest With Timeout\n    Create Session    api    https://httpbin.org    timeout=5\n    TRY\n        ${resp}=    GET On Session    api    /delay/10\n    EXCEPT    *Timeout*    type=GLOB\n        Log    Request timed out as expected\n    END\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    RequestsLibrary\n\n*** Test Cases ***\nRequest With Timeout\n    Create Session    api    https://httpbin.org    timeout=5\n    TRY\n        ${resp}=    GET On Session    api    /delay/10\n    EXCEPT    *Timeout*    type=GLOB\n        Log    Request timed out as expected\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-001",
+    "topic": "collections_library",
+    "user": "Show how to create a dictionary and access its values using Collections library.",
+    "assistant": "Dictionary with Collections:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nDictionary Access\n    ${d}=    Create Dictionary    name=Alice    age=30\n    ${name}=    Get From Dictionary    ${d}    name\n    Should Be Equal    ${name}    Alice\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nDictionary Access\n    ${d}=    Create Dictionary    name=Alice    age=30\n    ${name}=    Get From Dictionary    ${d}    name\n    Should Be Equal    ${name}    Alice",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-002",
+    "topic": "collections_library",
+    "user": "How do I verify a list contains a specific element using Collections library?",
+    "assistant": "List membership assertion:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nCheck List Membership\n    ${fruits}=    Create List    apple    banana    cherry\n    List Should Contain Value    ${fruits}    banana\n    Length Should Be    ${fruits}    3\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nCheck List Membership\n    ${fruits}=    Create List    apple    banana    cherry\n    List Should Contain Value    ${fruits}    banana\n    Length Should Be    ${fruits}    3",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-003",
+    "topic": "collections_library",
+    "user": "Show how to sort a list and get the first and last element.",
+    "assistant": "Sorting and indexing:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nSort And Index\n    ${nums}=    Create List    3    1    4    1    5\n    Sort List    ${nums}\n    ${first}=    Get From List    ${nums}    0\n    ${last}=    Get From List    ${nums}    -1\n    Should Be Equal As Integers    ${first}    1\n    Should Be Equal As Integers    ${last}    5\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nSort And Index\n    ${nums}=    Create List    3    1    4    1    5\n    Sort List    ${nums}\n    ${first}=    Get From List    ${nums}    0\n    ${last}=    Get From List    ${nums}    -1\n    Should Be Equal As Integers    ${first}    1\n    Should Be Equal As Integers    ${last}    5",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-004",
+    "topic": "collections_library",
+    "user": "How do I merge two dictionaries in Robot Framework?",
+    "assistant": "Merge dictionaries with Set To Dictionary:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nMerge Dicts\n    ${base}=    Create Dictionary    a=1    b=2\n    ${extra}=    Create Dictionary    c=3    d=4\n    Set To Dictionary    ${base}    &{extra}\n    Dictionary Should Contain Key    ${base}    c\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nMerge Dicts\n    ${base}=    Create Dictionary    a=1    b=2\n    ${extra}=    Create Dictionary    c=3    d=4\n    Set To Dictionary    ${base}    &{extra}\n    Dictionary Should Contain Key    ${base}    c",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-005",
+    "topic": "collections_library",
+    "user": "Show how to remove duplicates from a list.",
+    "assistant": "Remove duplicates example:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nRemove Duplicates Example\n    ${orig}=    Create List    a    b    a    c    b\n    ${unique}=    Remove Duplicates    ${orig}\n    Length Should Be    ${unique}    3\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nRemove Duplicates Example\n    ${orig}=    Create List    a    b    a    c    b\n    ${unique}=    Remove Duplicates    ${orig}\n    Length Should Be    ${unique}    3",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "cl-006",
+    "topic": "collections_library",
+    "user": "How do I assert two dictionaries are equal using Collections?",
+    "assistant": "Dictionary equality check:\n```robot\n*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nCompare Dicts\n    ${expected}=    Create Dictionary    status=ok    code=200\n    ${actual}=    Create Dictionary    status=ok    code=200\n    Dictionaries Should Be Equal    ${expected}    ${actual}\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    Collections\n\n*** Test Cases ***\nCompare Dicts\n    ${expected}=    Create Dictionary    status=ok    code=200\n    ${actual}=    Create Dictionary    status=ok    code=200\n    Dictionaries Should Be Equal    ${expected}    ${actual}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "vf-001",
+    "topic": "variable_files",
+    "user": "Show how to use a Python variable file with Robot Framework.",
+    "assistant": "Python variable file pattern.\n\nFile `variables/env_config.py`:\n```python\nBASE_URL = 'https://staging.example.com'\nTIMEOUT = '10s'\nADMIN_USER = 'admin'\n```\n\nSuite:\n```robot\n*** Settings ***\nVariables    variables/env_config.py\n\n*** Test Cases ***\nUse Config Variables\n    Log    Base URL: ${BASE_URL}\n    Log    Timeout: ${TIMEOUT}\n```",
+    "robot_snippet": "*** Settings ***\nVariables    variables/env_config.py\n\n*** Test Cases ***\nUse Config Variables\n    Log    Base URL: ${BASE_URL}\n    Log    Timeout: ${TIMEOUT}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "vf-002",
+    "topic": "variable_files",
+    "user": "How do I override a variable file variable at runtime using the CLI?",
+    "assistant": "Override at runtime with --variable flag:\n```bash\nrobot --variablefile variables/env_config.py --variable BASE_URL:https://local.example.com tests/\n```\n\nThe CLI `--variable` flag takes precedence over the variable file. You can also use `--variablefile` multiple times to layer multiple config files.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "vf-003",
+    "topic": "variable_files",
+    "user": "Show a variable file that returns different values based on an environment argument.",
+    "assistant": "Dynamic variable file:\n```python\n# variables/env_vars.py\nimport os\n\nENV = os.environ.get('RF_ENV', 'staging')\n_URLS = {\n    'staging': 'https://staging.example.com',\n    'prod': 'https://prod.example.com',\n}\nBASE_URL = _URLS.get(ENV, _URLS['staging'])\n```\n\nSuite:\n```robot\n*** Settings ***\nVariables    variables/env_vars.py\n\n*** Test Cases ***\nEnvironment Aware Test\n    Log    Running against ${BASE_URL}\n```",
+    "robot_snippet": "*** Settings ***\nVariables    variables/env_vars.py\n\n*** Test Cases ***\nEnvironment Aware Test\n    Log    Running against ${BASE_URL}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "vf-004",
+    "topic": "variable_files",
+    "user": "What is the difference between a Variables table in a suite and a variable file?",
+    "assistant": "A `*** Variables ***` table is local to a single suite file, while a variable file (`Variables    path/to/file.py`) is an external module loaded at runtime and shared across multiple suites. Variable files also support dynamic computation based on environment, CLI args, or external data. Use the table for suite-specific constants and variable files for cross-suite shared configuration.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "vf-005",
+    "topic": "variable_files",
+    "user": "Show a YAML variable file used with Robot Framework.",
+    "assistant": "YAML variable file (`variables/config.yaml`):\n```yaml\nBASE_URL: https://prod.example.com\nRETRY_COUNT: 3\n```\n\nSuite:\n```robot\n*** Settings ***\nVariables    variables/config.yaml\n\n*** Test Cases ***\nYAML Variable Test\n    Log    ${BASE_URL}\n    Log    ${RETRY_COUNT}\n```",
+    "robot_snippet": "*** Settings ***\nVariables    variables/config.yaml\n\n*** Test Cases ***\nYAML Variable Test\n    Log    ${BASE_URL}\n    Log    ${RETRY_COUNT}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-001",
+    "topic": "refactoring_patterns",
+    "user": "Show how to extract repeated login steps from multiple tests into a shared keyword.",
+    "assistant": "Extract shared keyword:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\nSuite Setup    Open Browser    https://example.com    chrome\nSuite Teardown    Close All Browsers\n\n*** Test Cases ***\nDashboard Access\n    Login As    admin    secret\n    Page Should Contain    Dashboard\n\nProfile Access\n    Login As    admin    secret\n    Page Should Contain    Profile\n\n*** Keywords ***\nLogin As\n    [Arguments]    ${user}    ${pass}\n    Input Text    id=username    ${user}\n    Input Password    id=password    ${pass}\n    Click Button    id=submit\n    Wait Until Page Contains    Welcome\n```",
+    "robot_snippet": "*** Keywords ***\nLogin As\n    [Arguments]    ${user}    ${pass}\n    Input Text    id=username    ${user}\n    Input Password    id=password    ${pass}\n    Click Button    id=submit\n    Wait Until Page Contains    Welcome",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-002",
+    "topic": "refactoring_patterns",
+    "user": "How do I split a large monolithic suite into layered resource files?",
+    "assistant": "Layered resource pattern.\n\n`resources/browser.robot`:\n```robot\n*** Settings ***\nLibrary    SeleniumLibrary\n\n*** Keywords ***\nOpen App Browser\n    Open Browser    ${BASE_URL}    chrome\n\nClose App Browser\n    Close All Browsers\n```\n\nMain suite:\n```robot\n*** Settings ***\nResource    resources/browser.robot\n\n*** Test Cases ***\nEnd To End Test\n    Open App Browser\n    Log    full flow\n    [Teardown]    Close App Browser\n```",
+    "robot_snippet": "*** Settings ***\nResource    resources/browser.robot\n\n*** Test Cases ***\nEnd To End Test\n    Open App Browser\n    Log    full flow\n    [Teardown]    Close App Browser",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-003",
+    "topic": "refactoring_patterns",
+    "user": "Refactor global variable mutation into argument-passing style keywords.",
+    "assistant": "Argument-driven refactor.\n\nBefore (anti-pattern):\n```robot\n*** Variables ***\n${TOKEN}    \n\n*** Keywords ***\nGet Token\n    ${TOKEN}=    Set Variable    abc123\n```\n\nAfter (recommended):\n```robot\n*** Keywords ***\nFetch Auth Token\n    RETURN    abc123\n\nUse Token\n    ${token}=    Fetch Auth Token\n    Log    Using ${token}\n```",
+    "robot_snippet": "*** Keywords ***\nFetch Auth Token\n    RETURN    abc123\n\nUse Token\n    ${token}=    Fetch Auth Token\n    Log    Using ${token}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-004",
+    "topic": "refactoring_patterns",
+    "user": "Convert a hard-coded URL in tests to a configurable variable.",
+    "assistant": "Configurable URL:\n```robot\n*** Variables ***\n${BASE_URL}    https://staging.example.com\n\n*** Test Cases ***\nLoad Homepage\n    Log    Connecting to ${BASE_URL}\n```\n\nAt runtime override:\n```bash\nrobot --variable BASE_URL:https://prod.example.com tests/\n```",
+    "robot_snippet": "*** Variables ***\n${BASE_URL}    https://staging.example.com\n\n*** Test Cases ***\nLoad Homepage\n    Log    Connecting to ${BASE_URL}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-005",
+    "topic": "refactoring_patterns",
+    "user": "Show how to replace fragile XPath selectors with robust CSS or ID-based locators.",
+    "assistant": "Locator refactoring pattern.\n\nBefore (fragile):\n```robot\n*** Test Cases ***\nClick Login\n    Click Element    /html/body/div[2]/form/button\n```\n\nAfter (robust):\n```robot\n*** Variables ***\n${LOGIN_BTN}    css=button[data-testid='login']\n\n*** Test Cases ***\nClick Login\n    Wait Until Element Is Visible    ${LOGIN_BTN}\n    Click Element    ${LOGIN_BTN}\n```",
+    "robot_snippet": "*** Variables ***\n${LOGIN_BTN}    css=button[data-testid='login']\n\n*** Test Cases ***\nClick Login\n    Wait Until Element Is Visible    ${LOGIN_BTN}\n    Click Element    ${LOGIN_BTN}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rp-006",
+    "topic": "refactoring_patterns",
+    "user": "How do I add test-level documentation to improve suite readability?",
+    "assistant": "Documentation example:\n```robot\n*** Settings ***\nDocumentation    Covers the login and session management flows.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Verifies that a registered user can log in successfully.\n    [Tags]    smoke    auth\n    Log    login ok\n\nLogin With Invalid Password\n    [Documentation]    Verifies that wrong password returns an error.\n    [Tags]    auth    negative\n    Log    login fail expected\n```",
+    "robot_snippet": "*** Settings ***\nDocumentation    Covers the login and session management flows.\n\n*** Test Cases ***\nLogin With Valid Credentials\n    [Documentation]    Verifies that a registered user can log in successfully.\n    [Tags]    smoke    auth\n    Log    login ok",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "ic-001",
+    "topic": "if_conditions",
+    "user": "Show an IF/ELSE IF/ELSE block in Robot Framework 5+.",
+    "assistant": "Inline IF/ELSE IF/ELSE:\n```robot\n*** Test Cases ***\nGrade Check\n    ${score}=    Set Variable    75\n    IF    ${score} >= 90\n        Log    Grade: A\n    ELSE IF    ${score} >= 70\n        Log    Grade: B\n    ELSE\n        Log    Grade: C\n    END\n```",
+    "robot_snippet": "*** Test Cases ***\nGrade Check\n    ${score}=    Set Variable    75\n    IF    ${score} >= 90\n        Log    Grade: A\n    ELSE IF    ${score} >= 70\n        Log    Grade: B\n    ELSE\n        Log    Grade: C\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "ic-002",
+    "topic": "if_conditions",
+    "user": "Show how to use Run Keyword If for legacy-compatible conditional logic.",
+    "assistant": "Run Keyword If for compatibility:\n```robot\n*** Test Cases ***\nConditional Legacy\n    ${value}=    Set Variable    active\n    Run Keyword If    '${value}' == 'active'    Log    Status is active\n    ...    ELSE    Log    Status is not active\n```",
+    "robot_snippet": "*** Test Cases ***\nConditional Legacy\n    ${value}=    Set Variable    active\n    Run Keyword If    '${value}' == 'active'    Log    Status is active\n    ...    ELSE    Log    Status is not active",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "ic-003",
+    "topic": "if_conditions",
+    "user": "How do I conditionally skip a test based on environment?",
+    "assistant": "Environment-based skip:\n```robot\n*** Variables ***\n${ENV}    staging\n\n*** Test Cases ***\nProd Only Test\n    Skip If    '${ENV}' != 'prod'    Not running in production environment.\n    Log    Production-only check passed.\n```",
+    "robot_snippet": "*** Variables ***\n${ENV}    staging\n\n*** Test Cases ***\nProd Only Test\n    Skip If    '${ENV}' != 'prod'    Not running in production environment.\n    Log    Production-only check passed.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "ic-004",
+    "topic": "if_conditions",
+    "user": "Show how to set a variable to different values based on a condition.",
+    "assistant": "Conditional variable assignment:\n```robot\n*** Test Cases ***\nSet Value By Condition\n    ${env}=    Set Variable    prod\n    ${url}=    Set Variable If    '${env}' == 'prod'    https://prod.example.com    https://staging.example.com\n    Log    ${url}\n```",
+    "robot_snippet": "*** Test Cases ***\nSet Value By Condition\n    ${env}=    Set Variable    prod\n    ${url}=    Set Variable If    '${env}' == 'prod'    https://prod.example.com    https://staging.example.com\n    Log    ${url}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "ic-005",
+    "topic": "if_conditions",
+    "user": "Show an inline IF used to conditionally call a keyword.",
+    "assistant": "Inline IF for conditional keyword call:\n```robot\n*** Test Cases ***\nConditional Keyword\n    ${debug_mode}=    Set Variable    ${True}\n    IF    ${debug_mode}    Log    Debug mode on    level=DEBUG\n```",
+    "robot_snippet": "*** Test Cases ***\nConditional Keyword\n    ${debug_mode}=    Set Variable    ${True}\n    IF    ${debug_mode}    Log    Debug mode on    level=DEBUG",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "dd-001",
+    "topic": "debugging_diagnostics",
+    "user": "How do I enable verbose debug logging in Robot Framework tests?",
+    "assistant": "Enable DEBUG level logging:\n```robot\n*** Test Cases ***\nDebug Example\n    Log    This is a debug message    level=DEBUG\n    Log    Info message    level=INFO\n    Set Log Level    DEBUG\n    Log    Now all debug messages appear.\n```\n\nFrom CLI: `robot --loglevel DEBUG tests/`",
+    "robot_snippet": "*** Test Cases ***\nDebug Example\n    Log    This is a debug message    level=DEBUG\n    Set Log Level    DEBUG\n    Log    Now all debug messages appear.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "dd-002",
+    "topic": "debugging_diagnostics",
+    "user": "Show how to use Run Keyword And Continue On Failure to collect all errors instead of stopping.",
+    "assistant": "Collect all failures:\n```robot\n*** Test Cases ***\nCollect All Errors\n    Run Keyword And Continue On Failure    Should Be Equal    a    b\n    Run Keyword And Continue On Failure    Should Be Equal    1    2\n    Log    Both checks attempted\n```",
+    "robot_snippet": "*** Test Cases ***\nCollect All Errors\n    Run Keyword And Continue On Failure    Should Be Equal    a    b\n    Run Keyword And Continue On Failure    Should Be Equal    1    2\n    Log    Both checks attempted",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "dd-003",
+    "topic": "debugging_diagnostics",
+    "user": "How do I use Robot Framework dry-run to check syntax without running tests?",
+    "assistant": "Dry-run syntax check:\n```bash\nrobot --dryrun --output NONE --log NONE --report NONE tests/\n```\n\nThis validates keyword resolution and argument counts without executing any actual keywords. It is useful as a pre-commit or pre-pipeline check. Pair it with Robocop for style linting:\n```bash\nrobocop tests/\n```",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "dd-004",
+    "topic": "debugging_diagnostics",
+    "user": "Show how to log a variable's current value for debugging inside a keyword.",
+    "assistant": "Variable inspection in keywords:\n```robot\n*** Keywords ***\nDebug Login State\n    [Arguments]    ${token}    ${session_id}\n    Log    token=${token}    level=DEBUG\n    Log    session_id=${session_id}    level=DEBUG\n    Log Variables\n```",
+    "robot_snippet": "*** Keywords ***\nDebug Login State\n    [Arguments]    ${token}    ${session_id}\n    Log    token=${token}    level=DEBUG\n    Log    session_id=${session_id}    level=DEBUG\n    Log Variables",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "dd-005",
+    "topic": "debugging_diagnostics",
+    "user": "What is the best way to minimize a failing test to a small reproducer?",
+    "assistant": "Minimization strategy for failing tests:\n1. Comment out all steps except the failing one.\n2. Verify the single step still fails to confirm isolation.\n3. Add back steps one at a time until the failure reappears.\n4. Check: library imports, variable scope, environment assumptions.\n5. Run with `--loglevel DEBUG` to see the full trace.\n6. Use `robot --include <tag>` to run only the failing test in isolation:\n```bash\nrobot --include failing_tag --loglevel DEBUG tests/\n```",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rpa-001",
+    "topic": "rpa_tasks",
+    "user": "Show a minimal Robot Framework RPA Tasks suite using the *** Tasks *** table.",
+    "assistant": "Minimal RPA Tasks suite:\n```robot\n*** Settings ***\nDocumentation    RPA automation task example.\n\n*** Tasks ***\nProcess Daily Report\n    Log    Fetching today's report\n    Log    Processing data\n    Log    Sending summary email\n```",
+    "robot_snippet": "*** Settings ***\nDocumentation    RPA automation task example.\n\n*** Tasks ***\nProcess Daily Report\n    Log    Fetching today's report\n    Log    Processing data\n    Log    Sending summary email",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rpa-002",
+    "topic": "rpa_tasks",
+    "user": "What is the difference between *** Test Cases *** and *** Tasks *** in Robot Framework?",
+    "assistant": "Both `*** Test Cases ***` and `*** Tasks ***` sections use the same syntax and keyword mechanism. The key differences:\n- `*** Test Cases ***` is for traditional QA testing where failures are test failures.\n- `*** Tasks ***` signals RPA (Robotic Process Automation) intent; tools like Robocorp recognize this.\n- You cannot mix both in the same file.\n- Semantically, tasks represent automated business processes, not assertions about system behavior.\n- Execution is otherwise identical. Choose based on your intent and tooling ecosystem.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rpa-003",
+    "topic": "rpa_tasks",
+    "user": "Show an RPA task that reads a CSV file and logs each row.",
+    "assistant": "CSV processing RPA task:\n```robot\n*** Settings ***\nLibrary    OperatingSystem\nLibrary    String\n\n*** Tasks ***\nProcess CSV Rows\n    ${content}=    Get File    data/input.csv\n    @{rows}=    Split To Lines    ${content}\n    FOR    ${row}    IN    @{rows}\n        Log    Row: ${row}\n    END\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    OperatingSystem\nLibrary    String\n\n*** Tasks ***\nProcess CSV Rows\n    ${content}=    Get File    data/input.csv\n    @{rows}=    Split To Lines    ${content}\n    FOR    ${row}    IN    @{rows}\n        Log    Row: ${row}\n    END",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rpa-004",
+    "topic": "rpa_tasks",
+    "user": "Show how to use OperatingSystem library to run a shell command from an RPA task.",
+    "assistant": "Shell command from RPA task:\n```robot\n*** Settings ***\nLibrary    OperatingSystem\n\n*** Tasks ***\nRun System Check\n    ${rc}    ${output}=    Run And Return Rc And Output    echo hello\n    Should Be Equal As Integers    ${rc}    0\n    Log    Output: ${output}\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    OperatingSystem\n\n*** Tasks ***\nRun System Check\n    ${rc}    ${output}=    Run And Return Rc And Output    echo hello\n    Should Be Equal As Integers    ${rc}    0\n    Log    Output: ${output}",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "rpa-005",
+    "topic": "rpa_tasks",
+    "user": "Show a task that writes a result to a file using OperatingSystem.",
+    "assistant": "Write result to file:\n```robot\n*** Settings ***\nLibrary    OperatingSystem\n\n*** Tasks ***\nSave Result\n    ${result}=    Set Variable    processed_ok\n    Create File    output/result.txt    ${result}\n    File Should Exist    output/result.txt\n    Log    Result saved.\n```",
+    "robot_snippet": "*** Settings ***\nLibrary    OperatingSystem\n\n*** Tasks ***\nSave Result\n    ${result}=    Set Variable    processed_ok\n    Create File    output/result.txt    ${result}\n    File Should Exist    output/result.txt\n    Log    Result saved.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "uk-017",
+    "topic": "unknown",
+    "user": "Does Robot Framework support native GPU acceleration for test execution?",
+    "assistant": "I am not sure. Robot Framework is a test automation framework that runs keyword-driven or task-based workflows on the CPU. I am not aware of official native GPU acceleration support. Check the official docs or community channels for the latest information.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "uk-018",
+    "topic": "unknown",
+    "user": "Is there an official plugin that auto-generates all test cases from requirements docs?",
+    "assistant": "I cannot confirm this. There are community tools and integrations that assist with test generation from specifications, but I am not aware of an officially maintained Robot Framework core plugin with that capability. I do not know the current state; please verify at docs.robotframework.org.",
+    "doc_ref": "synthetic"
+  },
+  {
+    "id": "uk-019",
+    "topic": "unknown",
+    "user": "Can the Robot Framework built-in runner replace a full CI system like Jenkins or GitHub Actions?",
+    "assistant": "I am not sure that is the intended use case. Robot Framework is a test execution framework, not a CI orchestration system. It is typically invoked from within CI pipelines, not used to replace them. Consult official documentation to understand integration patterns with CI systems.",
+    "doc_ref": "synthetic"
   }
 ]
