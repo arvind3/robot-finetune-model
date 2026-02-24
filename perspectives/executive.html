@@ -184,6 +184,32 @@
     .standout-box .sub { color: #4ade80; font-size: 0.85rem; margin-top: 0.4rem; opacity: 0.8; }
     .back-link { color: #475569; text-decoration: none; font-size: 0.8rem; }
     .back-link:hover { color: #22c55e; }
+  
+    /* mobile-friendly patch v1 */
+    @media (max-width: 900px) {
+      html, body { overflow-x: hidden; }
+      nav, .site-nav { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .nav-inner, nav > div { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .nav-links { display: none !important; }
+      .hamburger { display: block !important; }
+      .mobile-menu { display: none; }
+      .mobile-menu.open { display: flex !important; }
+      .content, .page-body, section, main, .hero { padding-left: 1rem !important; padding-right: 1rem !important; }
+      .hero { padding-top: 2.5rem !important; }
+      .hero h1, h1 { font-size: clamp(1.5rem, 7vw, 2.1rem) !important; line-height: 1.2 !important; }
+      h2 { font-size: clamp(1.25rem, 5.2vw, 1.7rem) !important; }
+      .kpis-inner, .opp-grid, .value-grid, .big-number-row, .cards-grid, .grid, [class*='grid-cols-'] {
+        grid-template-columns: 1fr !important;
+      }
+      .metric-card, .value-card, .card, .big-number { padding: 1rem !important; }
+      .btn, button, a[role='button'], .nav-links a, .mobile-menu a { min-height: 44px; }
+      .quote-block, .what-block, .opp-stat-block { padding: 1rem !important; }
+    }
+    @media (max-width: 520px) {
+      body { font-size: 15px; }
+      .tag, .section-label { font-size: 0.68rem !important; }
+    }
+
   </style>
 </head>
 <body>
